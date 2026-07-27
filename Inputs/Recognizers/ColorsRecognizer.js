@@ -1,4 +1,3 @@
-import { initOpenCV } from '../../Utils/Libraries/LoadOpenCV.js';
 
 
 export class ColorsRecognizer {
@@ -11,22 +10,7 @@ export class ColorsRecognizer {
         this.lastVideoTime = -1;
     }
 
-    async initColors() {
-        try {
-            try {
-                await initOpenCV();
-            } catch (error) {
-                console.error("🚨 Échec d'OpenCV.", error);
-                return;
-            }
 
-            console.log("UpdateColors : Colors est prêt !");
-            return true; // Indique que tout s'est bien passé
-        } catch (error) {
-            console.error("Erreur d'initialisation OpenCV :", error);
-            return false;
-        }
-    }
 
 
 

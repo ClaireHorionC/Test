@@ -10,6 +10,9 @@ import { ENIGMA_IDS } from '../Utils/Constant.js';
 import { showError } from '../UI/AlertManager.js';
 import { showVictoryScreen } from '../UI/AlertManager.js';
 
+import { initOpenCV } from '../../Utils/Libraries/LoadOpenCV.js';
+
+
 class GameEngine {
     constructor() {
         // this.networkManager = new NetworkManager();
@@ -39,6 +42,16 @@ class GameEngine {
         if (!inputsReady) {
             console.error("🚨 GameEngine: Échec de l'IA.");
             showError("Erreur fatale de l'IA. Vérifiez la console.");
+            return;
+        }
+
+
+        // we init OpenCV in the global init function because it is used by at least 2 enigmas. Mediapipe is loaded in LsfRecognizer because it used only there
+        //I may change that and load all the librairies here but for the moment it is this way
+        try {
+            await initOpenCV();
+        } catch (error) {
+            console.error("🚨 Échec d'OpenCV.", error);
             return;
         }
 
