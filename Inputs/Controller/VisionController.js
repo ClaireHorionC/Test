@@ -1,9 +1,13 @@
 import { ColorsRecognizer } from '../Recognizers/ColorsRecognizer.js';
 import { LsfRecognizer } from '../Recognizers/LsfRecognizer.js';
+import { ArucoRecognizer } from '../Recognizers/ArucoRecognizer.js';
+
 import { ENIGMA_IDS } from '../../Utils/Constant.js';
 import uiManagerInstance from '../../UI/UIManager.js';
 
 import { showError } from '../../UI/AlertManager.js';
+import { wait } from '../../Utils/UtilFunctions.js';
+
 
 
 
@@ -23,13 +27,18 @@ export class VisionController {
 
         this.lsfRecognizer = new LsfRecognizer(videoElement, canvasElement);
         this.colorsRecognizer = new ColorsRecognizer(videoElement, canvasElement);
+        wait(5000);
+        this.arucoRecognizer = new ArucoRecognizer(videoElement, canvasElement);
+
     }
 
     async init() {
         try {
             const initiateLsf = await this.lsfRecognizer.initLsf();
             //const initiateColors = await this.colorsRecognizer.initColors();
-            return (initiateLsf);
+            console.log("siuee");
+            const initiateAruco = await this.arucoRecognizer.initAruco();
+            return (initiateLsf && initiateAruco);
         } catch (error) {
             this.handleHardwareCrash("Erreur critique lors du chargement des modèles IA.");
             return false;
@@ -100,6 +109,9 @@ export class VisionController {
                 break;
             case ENIGMA_IDS.COLORS:
                 this.colorsRecognizer.updateColors(this.currentResults, this.webcamRunning);
+                break;
+            case ENIGMA_IDS.ARUCO:
+                this.arucoRecognizer.updateAruco(this.currentResults, this.webcamRunning);
                 break;
             default:
                 console.log("DEBUG : update dans VisionController n'a pas trouvé la fenêtre");
