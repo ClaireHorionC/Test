@@ -4,9 +4,7 @@ import inputManagerInstance from './Inputs/InputManager.js';
 
 // On attend que la page HTML soit dessinée
 window.addEventListener("DOMContentLoaded", async () => {
-    // 1. On instancie le moteur
 
-    // 2. CORRECTION : On lance le chargement IA IMMÉDIATEMENT et automatiquement
     await gameEngineInstance.init();
 
     const btnWebcam = document.getElementById("webcamButton");
