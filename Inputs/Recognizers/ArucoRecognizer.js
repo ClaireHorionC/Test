@@ -1,114 +1,3 @@
-
-
-
-// A Adapter
-const UpLeft1 = 90, UpRight1 = 91, DownRight1 = 93, DownLeft1 = 92;
-const UpLeft2 = 94, UpRight2 = 95, DownRight2 = 97, DownLeft2 = 96;
-
-
-let dictCards = {
-    1: {
-        "ID": 0,
-        "falseID": 11,
-        "pos": [7, 124],
-        "sheet": 1,
-        "name": "Deux IA peuvent créer leur propre langage."
-    },
-    2: {
-        "ID": 1,
-        "falseID": 10,
-        "pos": [77, 124],
-        "sheet": 1,
-        "name": "L'IA peut améliorer le diagnostic de certaines maladies, en soutien au médecin."
-    },
-    3: {
-        "ID": 2,
-        "falseID": 9,
-        "pos": [147, 124],
-        "sheet": 1,
-        "name": "Une IA a une meilleure puissance de calcul qu'un humain."
-    },
-    4: {
-        "ID": 3,
-        "falseID": 8,
-        "pos": [217, 124],
-        "sheet": 1,
-        "name": "Les IA génératives sont très mauvaises en mathématiques."
-    },
-    5: {
-        "ID": 4,
-        "falseID": 15,
-        "pos": [7, 124],
-        "sheet": 2,
-        "name": "Les IA peuvent mentir."
-    },
-    6: {
-        "ID": 5,
-        "falseID": 14,
-        "pos": [77, 124],
-        "sheet": 2,
-        "name": "L'IA peut apprendre de façon autonome."
-    },
-    7: {
-        "ID": 6,
-        "falseID": 13,
-        "pos": [147, 124],
-        "sheet": 2,
-        "name": "Les IA récentes consomment moins d'énergie qu'une recherche Internet classique."
-    },
-    8: {
-        "ID": 7,
-        "falseID": 12,
-        "pos": [217, 124],
-        "sheet": 2,
-        "name": "L'IA générative peut créer du contenu original."
-    }
-};
-
-const realWidth = 262;   // distance entre milieux des 2 codes du haut
-const realHeight = 175;   // distance entre milieux des 2 codes de gauche
-// Jusque ici
-
-const sheets = [
-    {
-        ID: 1,
-        corners: [UpLeft1, UpRight1, DownRight1, DownLeft1],
-        cornersVisible: true,
-        counterCornersInvisible: 0
-    },
-    {
-        ID: 2,
-        corners: [UpLeft2, UpRight2, DownRight2, DownLeft2],
-        cornersVisible: true,
-        counterCornersInvisible: 0
-    }
-];
-
-let sheetCorners = [UpLeft1, UpRight1, DownRight1, DownLeft1, UpLeft2, UpRight2, DownRight2, DownLeft2];
-
-const positionTolerance = 10;
-
-let checkNow = false;
-let nbIterationsCheck = 0;
-const nbIterations = 20;
-
-let counter = 0;
-const maxID = 100;
-let dictID = {};
-for (let i = 0; i < maxID; i++) dictID[i] = 0;
-
-let previousSheetCorners = {};
-let lastAnalysedPicture = null;
-
-
-let lastTime = 0;
-const FPS_LIMIT = 15;
-const delay = 1000 / FPS_LIMIT;
-
-let cap, src, gray, realPoints, clahe, parameters, corners, ids, detector;
-
-let cv;
-
 export class ArucoRecognizer {
 
     constructor(videoElement, canvasElement) {
@@ -120,11 +9,16 @@ export class ArucoRecognizer {
             this.ctx = this.canvas.getContext("2d");
         }
 
-        // On ne lance SURTOUT PAS onOpenCvReady() ou startup() ici !
+        // 1. Chargement des paramètres fixes du jeu
+        this.initConfiguration();
+
+        // 2. Chargement de l'état (variables qui changent)
+        this.initState();
+
         this.lastProcessTime = 0;
         this.isInitialized = false;
 
-        // Préparation des variables (avec this.) pour plus tard
+        // Préparation des variables OpenCV pour plus tard
         this.cap = null;
         this.srcMat = null;
         this.gray = null;
@@ -142,71 +36,88 @@ export class ArucoRecognizer {
     }
 
     /**
-     * Cette fonction sera appelée plus tard, UNIQUEMENT quand la vidéo tournera 
-     * et qu'OpenCV sera garanti d'être chargé.
+     * Regroupe toutes les données statiques (configurations, dictionnaires...)
      */
+    initConfiguration() {
+        // Constantes locales à la fonction car elles ne servent qu'à construire les tableaux
+        const UpLeft1 = 90, UpRight1 = 91, DownRight1 = 93, DownLeft1 = 92;
+        const UpLeft2 = 94, UpRight2 = 95, DownRight2 = 97, DownLeft2 = 96;
+
+        this.realWidth = 262;
+        this.realHeight = 175;
+        this.positionTolerance = 10;
+        this.nbIterations = 20;
+        this.maxID = 100;
+        this.FPS_LIMIT = 15;
+        this.delay = 1000 / this.FPS_LIMIT;
+
+        this.dictCards = {
+            1: { "ID": 0, "falseID": 11, "pos": [7, 124], "sheet": 1, "name": "Deux IA peuvent créer leur propre langage." },
+            2: { "ID": 1, "falseID": 10, "pos": [77, 124], "sheet": 1, "name": "L'IA peut améliorer le diagnostic de certaines maladies, en soutien au médecin." },
+            3: { "ID": 2, "falseID": 9, "pos": [147, 124], "sheet": 1, "name": "Une IA a une meilleure puissance de calcul qu'un humain." },
+            4: { "ID": 3, "falseID": 8, "pos": [217, 124], "sheet": 1, "name": "Les IA génératives sont très mauvaises en mathématiques." },
+            5: { "ID": 4, "falseID": 15, "pos": [7, 124], "sheet": 2, "name": "Les IA peuvent mentir." },
+            6: { "ID": 5, "falseID": 14, "pos": [77, 124], "sheet": 2, "name": "L'IA peut apprendre de façon autonome." },
+            7: { "ID": 6, "falseID": 13, "pos": [147, 124], "sheet": 2, "name": "Les IA récentes consomment moins d'énergie qu'une recherche Internet classique." },
+            8: { "ID": 7, "falseID": 12, "pos": [217, 124], "sheet": 2, "name": "L'IA générative peut créer du contenu original." }
+        };
+
+        this.sheets = [
+            { ID: 1, corners: [UpLeft1, UpRight1, DownRight1, DownLeft1], cornersVisible: true, counterCornersInvisible: 0 },
+            { ID: 2, corners: [UpLeft2, UpRight2, DownRight2, DownLeft2], cornersVisible: true, counterCornersInvisible: 0 }
+        ];
+
+        this.sheetCorners = [UpLeft1, UpRight1, DownRight1, DownLeft1, UpLeft2, UpRight2, DownRight2, DownLeft2];
+    }
+
+    /**
+     * Initialise les variables d'état (compteurs, boolean d'action...)
+     */
+    initState() {
+        this.checkNow = false;
+        this.nbIterationsCheck = 0;
+        this.counter = 0;
+        this.lastAnalysedPicture = null;
+
+        this.dictID = {};
+        for (let i = 0; i < this.maxID; i++) {
+            this.dictID[i] = 0;
+        }
+    }
+
+
     initAruco() {
-        console.log("siueeeeee");
-
-        /*if (!window.cv || typeof window.cv.VideoCapture === "undefined") {
-            return false; // On annule et on retentera à la prochaine frame
-        }*/
-        console.log("eafeafea");
-
-
-        console.log("eafeaeaeeeeeeeeeeeeeeeeeeeeeeeafea");
-
-        //if (!this.video || this.video.videoWidth === 0) return false;
-
-        console.log("siu");
-
-        // On utilise bien "this." pour assigner les propriétés à la classe
-        //this.cap = new cv.VideoCapture(this.video);
-        console.log("siaaaaaaaaaaaaaaau");
-
-        //this.srcMat = new cv.Mat(this.video.videoHeight, this.video.videoWidth, cv.CV_8UC4);
-        //this.gray = new cv.Mat();
-
-        console.log("siaaaau");
-
-
-
+        console.log("Initialisation Aruco sans appel prématuré à la caméra...");
         this.isInitialized = true;
-        console.log("📸 ArucoRecognizer : Matrices prêtes !");
         return true;
     }
 
 
     updateAruco() {
-
+        const cv = window.cv; // Assure que cv est bien récupéré localement
 
         if (!this.cap) {
-            cv = window.cv;
-
             this.cap = new cv.VideoCapture(this.video);
             this.srcMat = new cv.Mat(this.video.videoHeight, this.video.videoWidth, cv.CV_8UC4);
             this.gray = new cv.Mat();
 
-            this.realPoints = cv.matFromArray(4, 1, cv.CV_32FC2, [0, 0, 262, 0, 262, 175, 0, 175]);
+            this.realPoints = cv.matFromArray(4, 1, cv.CV_32FC2, [0, 0, this.realWidth, 0, this.realWidth, this.realHeight, 0, this.realHeight]);
             this.clahe = new cv.CLAHE(1.5, new cv.Size(4, 4));
 
             let dictionary = cv.getPredefinedDictionary(cv.DICT_4X4_100);
             let parameters = new cv.aruco_DetectorParameters();
             let refineParameters = new cv.aruco_RefineParameters(10.0, 3.0, true);
             this.detector = new cv.aruco_ArucoDetector(dictionary, parameters, refineParameters);
-
         }
-
 
         let corners = new cv.MatVector();
         let ids = new cv.Mat();
         let rejected = new cv.MatVector();
 
         try {
-
-            counter++;
-            if (counter >= 20) {
-                counter = 0;
+            this.counter++;
+            if (this.counter >= 20) {
+                this.counter = 0;
             }
 
             this.readFrame(this.srcMat);
@@ -218,7 +129,6 @@ export class ArucoRecognizer {
             if (ids.rows > 0) {
                 cv.drawDetectedMarkers(this.gray, corners, ids);
 
-                // Récupération des coordonnées des marqueurs
                 for (let i = 0; i < ids.rows; ++i) {
                     let IDDetected = ids.data32S[i];
                     let markerCorners = corners.get(i).data32F;
@@ -227,30 +137,25 @@ export class ArucoRecognizer {
                     let cy = ((markerCorners[1] + markerCorners[3] + markerCorners[5] + markerCorners[7]) / 4);
 
                     cornersPixels[IDDetected] = [cx, cy];
-
                 }
             }
-
 
             let pPixel = new cv.Mat(1, 1, cv.CV_32FC2);
             let pReal = new cv.Mat();
 
-            for (let s of sheets) {
+            for (let s of this.sheets) {
                 let [ul, ur, dr, dl] = s.corners;
 
                 if (ul in cornersPixels && ur in cornersPixels && dr in cornersPixels && dl in cornersPixels) {
                     s.cornersVisible = true;
 
                     let pointsPixels = cv.matFromArray(4, 1, cv.CV_32FC2, [...cornersPixels[ul], ...cornersPixels[ur], ...cornersPixels[dr], ...cornersPixels[dl]]);
-
                     let H = cv.findHomography(pointsPixels, this.realPoints);
 
                     if (!H.empty()) {
-                        for (const card of Object.values(dictCards)) {
-
+                        for (const card of Object.values(this.dictCards)) {
                             this.analyseMarker(card.ID, card, s, H, cornersPixels, pPixel, pReal);
                             this.analyseMarker(card.falseID, card, s, H, cornersPixels, pPixel, pReal);
-
                         }
                         H.delete();
                     }
@@ -258,7 +163,7 @@ export class ArucoRecognizer {
 
                 } else {
                     s.cornersVisible = false;
-                    if (checkNow) {
+                    if (this.checkNow) {
                         s.counterCornersInvisible++;
                     }
                 }
@@ -267,35 +172,30 @@ export class ArucoRecognizer {
             pPixel.delete();
             pReal.delete();
 
-
-            // Affichage du résultat
             cv.imshow(this.canvas, this.srcMat);
-            //cv.imshow('canvasOutput', this.gray);
 
         } catch (err) {
             console.error("Erreur dans la boucle de traitement :", err);
+        } finally {
+            // Le "finally" garantit que la mémoire est libérée même si une erreur survient
+            corners.delete();
+            ids.delete();
+            rejected.delete();
         }
 
-        // Nettoyage impératif de la mémoire à chaque frame
-        corners.delete();
-        ids.delete();
-        rejected.delete();
-
-        if (checkNow) {
-            nbIterationsCheck++;
-            if (nbIterationsCheck >= nbIterations) {
-                checkNow = false;
+        if (this.checkNow) {
+            this.nbIterationsCheck++;
+            if (this.nbIterationsCheck >= this.nbIterations) {
+                this.checkNow = false;
                 this.checkCards();
             }
         }
     }
 
 
-
     readFrame(src) {
-
+        const cv = window.cv;
         this.cap.read(src);
-
         // Conversion en niveaux de gris et redimensionnement
         let rgbaPlanes = new cv.MatVector();
         cv.split(src, rgbaPlanes);
@@ -304,102 +204,89 @@ export class ArucoRecognizer {
         firstPlane.delete();
         rgbaPlanes.delete();
 
-        //cv.cvtColor(src, gray, cv.COLOR_RGBA2GRAY);
-        let size = new cv.Size(0, 0);
-        //cv.resize(this.gray, this.gray, size, 2, 2, cv.INTER_NEAREST);
+
         this.clahe.apply(this.gray, this.gray);
 
-        if (lastAnalysedPicture) {
-            lastAnalysedPicture.delete();
+        if (this.lastAnalysedPicture) {
+            this.lastAnalysedPicture.delete();
         }
-        lastAnalysedPicture = this.gray.clone();
-
+        this.lastAnalysedPicture = this.gray.clone();
     }
 
 
-
     analyseMarker(markerID, card, sheet, H, cornersPixels, pPixel, pReal) {
+        const cv = window.cv;
 
         if (!(markerID in cornersPixels)) {
             return;
         }
 
-        pPixel.data32F[0] = cornersPixels[markerID][0]
-        pPixel.data32F[1] = cornersPixels[markerID][1]
+        pPixel.data32F[0] = cornersPixels[markerID][0];
+        pPixel.data32F[1] = cornersPixels[markerID][1];
 
         cv.perspectiveTransform(pPixel, pReal, H);
 
         let xReal = pReal.data32F[0];
         let yReal = pReal.data32F[1];
 
-        let text = `${Math.round(xReal)}; ${Math.round(yReal)}`;
-        let position = new cv.Point(cornersPixels[markerID][0], cornersPixels[markerID][1] - 10);
-        //cv.putText(gray, text, position, cv.FONT_HERSHEY_SIMPLEX, 0.5, new cv.Scalar(0, 255, 0, 255), 2);
-
-
         if (
-            checkNow &&
+            this.checkNow &&
             card.sheet == sheet.ID &&
-            Math.abs(xReal - card.pos[0]) <= positionTolerance &&
-            Math.abs(yReal - card.pos[1]) <= positionTolerance
+            Math.abs(xReal - card.pos[0]) <= this.positionTolerance &&
+            Math.abs(yReal - card.pos[1]) <= this.positionTolerance
         ) {
-            dictID[markerID]++;
+            this.dictID[markerID]++;
         }
-
     }
 
 
     startCheck() {
-        for (let i = 0; i < maxID; i++) {
-            dictID[i] = 0;
+        for (let i = 0; i < this.maxID; i++) {
+            this.dictID[i] = 0;
         }
 
-        for (let s of sheets) {
+        for (let s of this.sheets) {
             s.counterCornersInvisible = 0;
             s.cornersVisible = true;
         }
 
-        checkNow = true;
-        nbIterationsCheck = 0;
+        this.checkNow = true;
+        this.nbIterationsCheck = 0;
 
         document.getElementById("result").textContent = "Analyse en cours ...";
         document.getElementById("message").textContent = "";
         document.getElementById("message2").textContent = "";
-
     }
 
 
-
     checkCards() {
-
         let nbCardsOK = 0;
-        let nbCardsToPlace = Object.keys(dictCards).length;
+        let nbCardsToPlace = Object.keys(this.dictCards).length;
         let allSheetsVisible = true;
 
         let text;
         let mess = "";
         let mess2 = "";
 
-        for (let carteID in dictID) {
-            for (let i of Object.keys(dictCards)) {
-                if (carteID == dictCards[i]["ID"]) {
-                    if (dictID[carteID] >= 1) {
+        for (let carteID in this.dictID) {
+            for (let i of Object.keys(this.dictCards)) {
+                if (carteID == this.dictCards[i]["ID"]) {
+                    if (this.dictID[carteID] >= 1) {
                         nbCardsOK++;
                     }
                 }
             }
         }
 
-        for (let i of Object.keys(dictCards)) {
-            if ((dictID[dictCards[i]["ID"]] == 0) && (dictID[dictCards[i]["falseID"]] == 0)) {
-
-                mess += `La carte "${dictCards[i]["name"]}" n'a pas été détectée à son emplacement. `;
+        for (let i of Object.keys(this.dictCards)) {
+            if ((this.dictID[this.dictCards[i]["ID"]] == 0) && (this.dictID[this.dictCards[i]["falseID"]] == 0)) {
+                mess += `La carte "${this.dictCards[i]["name"]}" n'a pas été détectée à son emplacement. `;
                 mess2 = "Si une carte n'a pas été détectée, passez brièvement la main devant la caméra pendant la vérification.";
             }
         }
 
-        for (let s of sheets) {
-            if (s.counterCornersInvisible > (nbIterations - 2)) {
+        for (let s of this.sheets) {
+            if (s.counterCornersInvisible > (this.nbIterations - 2)) {
                 allSheetsVisible = false;
                 break;
             }
@@ -408,7 +295,6 @@ export class ArucoRecognizer {
         if (allSheetsVisible) {
             if (nbCardsOK === nbCardsToPlace) {
                 text = "Bravo !";
-
             } else {
                 text = "Nombre de cartes correctes et bien placées: " + nbCardsOK + " sur " + nbCardsToPlace + " cartes";
             }
@@ -421,5 +307,4 @@ export class ArucoRecognizer {
         document.getElementById("message").textContent = mess;
         document.getElementById("message2").textContent = mess2;
     }
-
 }
