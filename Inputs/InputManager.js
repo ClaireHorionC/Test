@@ -11,14 +11,12 @@ class InputManager {
 
         this.vision = new VisionController(videoElement, canvasElement);
         this.keyboard = new KeyboardController();
-        // this.keyboard = new KeyboardController();
     }
 
     // Démarre tous les capteurs
     async init() {
         console.log("InputManager : Lancement des capteurs...");
         const isVisionReady = await this.vision.init();
-        // await this.keyboard.init();
         return isVisionReady;
     }
 
