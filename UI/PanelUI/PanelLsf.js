@@ -7,10 +7,10 @@ export class PanelLsf {
     /**
     * Shows what letter we detect
     */
-    updateGestureDebugText({ gestures }) {
-        if (!gestures) return;
+    updateGestureDebugText(currentGestures) {
+        if (!currentGestures) return;
 
-        const gestesValides = gestures.filter(g => g && g !== "");
+        const gestesValides = currentGestures.filter(g => g && g !== "");
 
         if (gestesValides.length > 0) {
             this.lsfTextBox.style.backgroundColor = "#E91E63";
