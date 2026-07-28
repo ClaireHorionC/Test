@@ -32,11 +32,9 @@ class InputManager {
         // this.keyboard.update();
     }
 
-    // LA méthode clé : retourne l'état global du joueur au GameEngine
     getState() {
         return {
             gestures: this.vision.getResults()
-            // keys: this.keyboard.getPressedKeys()
         };
     }
 }
