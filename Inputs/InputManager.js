@@ -31,9 +31,7 @@ class InputManager {
     }
 
     getState() {
-        return {
-            gestures: this.vision.getResults()
-        };
+        return this.vision.getResults();
     }
 }
 

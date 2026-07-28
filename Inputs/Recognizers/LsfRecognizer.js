@@ -20,9 +20,9 @@ export class LsfRecognizer {
         return (this.gestureRecognizer !== null);
     }
 
-    updateLsf(currentGestures, webcamRunning) {
+    updateLsf(currentResults, webcamRunning) {
         // On vide la liste des gestes à chaque nouvelle image
-        currentGestures.length = 0;
+        currentResults.gestures.length = 0;
 
         if (webcamRunning && this.video.currentTime !== this.lastVideoTime && this.video.videoWidth > 0 && this.gestureRecognizer) {
             this.lastVideoTime = this.video.currentTime;
@@ -35,19 +35,19 @@ export class LsfRecognizer {
             const drawingUtils = new DrawingUtils(this.ctx);
 
             this.drawMediapipeHandsOverlay(results, drawingUtils);
-            this.detectingGestures(results, currentGestures);
+            this.detectingGestures(results, currentResults);
 
         }
     }
 
-    detectingGestures(results, currentGestures) {
+    detectingGestures(results, currentResults) {
 
         if (results.landmarks) {
             for (let i = 0; i < results.landmarks.length; i++) {
                 const landmarks = results.landmarks[i];
                 const letterDetected = whichLetterIsDetected(landmarks);
                 if (!(letterDetected === "")) { //if we find at least one letter
-                    currentGestures.push(letterDetected);
+                    currentResults.gestures.push(letterDetected);
                 }
             }
         }

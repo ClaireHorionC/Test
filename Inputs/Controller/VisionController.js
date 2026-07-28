@@ -22,12 +22,15 @@ export class VisionController {
         //this.lastVideoTime = -1;
         this.webcamRunning = false;
 
-        // L'état propre de la vision à l'instant T
-        this.currentResults = [];
+        this.currentResults = {
+            gestures: [],      // Pour le LsfRecognizer
+            colors: [],        // Pour le ColorsRecognizer
+            markers: [],       // Pour le ArucoRecognizer
+            sheetsVisible: []  // Pour le ArucoRecognizer
+        };
 
         this.lsfRecognizer = new LsfRecognizer(videoElement, canvasElement);
         this.colorsRecognizer = new ColorsRecognizer(videoElement, canvasElement);
-        wait(5000);
         this.arucoRecognizer = new ArucoRecognizer(videoElement, canvasElement);
 
     }
@@ -119,7 +122,10 @@ export class VisionController {
     }
 
     // InputManager used this to get the Results
-    getResults() {
+    getResults(tabId) {
+        console.log("hum");
+        console.log(this.currentResults);
+        console.log("aa");
         return this.currentResults;
     }
 
