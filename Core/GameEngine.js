@@ -10,7 +10,7 @@ import { ENIGMA_IDS } from '../Utils/Constant.js';
 import { showError } from '../UI/AlertManager.js';
 import { showVictoryScreen } from '../UI/AlertManager.js';
 
-import { initOpenCV } from '../../Utils/Libraries/LoadOpenCV.js';
+import { initOpenCV } from '../Utils/Libraries/LoadOpenCV.js';
 
 
 class GameEngine {
