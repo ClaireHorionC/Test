@@ -1,6 +1,6 @@
 export class KeyboardController {
     constructor() {
-        this.cheatCode = "grenouilleviolette";
+        this.cheatCode = "uio";
         this.keyBuffer = "";
 
         this.initKeyboardListener();
