@@ -8,8 +8,10 @@ export class PanelLsf {
     * Shows what letter we detect
     */
     updateGestureDebugText(currentGestures) {
-        if (!currentGestures) return;
-
+        if (!currentGestures) {
+            console.log("DEBUG : updateGestureDebugText n'a pas le currentState");
+            return;
+        }
         const gestesValides = currentGestures.filter(g => g && g !== "");
 
         if (gestesValides.length > 0) {
