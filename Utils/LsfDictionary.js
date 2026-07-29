@@ -33,7 +33,7 @@ export function whichLetterIsDetected(landmarks) {
         return "D";
     }
 
-    else if (isIndexFolded && isMiddleFolded && isRingFolded && isPinkyFolded && !isThumbFolded && getDistance(thumbTip, landmarks[5]) > 0.15) {
+    else if (isIndexFolded && isMiddleFolded && isRingFolded && isPinkyFolded && !isThumbFolded && getDistance(thumbTip, landmarks[5]) > 0.08) {
         return "A";
     }
 
@@ -45,7 +45,7 @@ export function whichLetterIsDetected(landmarks) {
 
     // 4. Lettre "P" : Index tendu, majeur tendu mais pointant vers le bas.
     // On utilise la coordonnée 'y' pour s'assurer que le majeur est plus bas que l'index (sur MediaPipe, Y augmente vers le bas de l'écran).
-    else if (!isIndexFolded && !isMiddleFolded && isRingFolded && isPinkyFolded && getDistance(indexTip, middleTip) > 0.08) {
+    else if (!isIndexFolded && !isMiddleFolded && isRingFolded && isPinkyFolded && getDistance(indexTip, middleTip) > 0.07) {
         return "P";
     }
 
@@ -54,9 +54,9 @@ export function whichLetterIsDetected(landmarks) {
         return "H";
     }
 
-    // 6. Lettre "U" : Index et majeur tendus et COLLÉS (distance < 0.06)
-    else if (!isIndexFolded && !isMiddleFolded && isRingFolded && isPinkyFolded && getDistance(indexTip, middleTip) < 0.1) {
-        return "U";
+    // 6. Lettre "N" : Index et majeur tendus et COLLÉS (distance < 0.06)
+    else if (!isIndexFolded && !isMiddleFolded && isRingFolded && isPinkyFolded && getDistance(indexTip, middleTip) < 0.04) {
+        return "N";
     }
 
     // 7. Lettre "I" : Petit doigt tendu, les 3 autres pliés
