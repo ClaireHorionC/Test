@@ -24,7 +24,7 @@ export class VisionController {
 
         this.currentResults = {
             gestures: [],      // Pour le LsfRecognizer
-            colors: [],        // Pour le ColorsRecognizer
+            colors: new Set(),        // Pour le ColorsRecognizer
             markers: [],       // Pour le ArucoRecognizer
             sheetsVisible: []  // Pour le ArucoRecognizer
         };
@@ -123,9 +123,7 @@ export class VisionController {
 
     // InputManager used this to get the Results
     getResults(tabId) {
-        console.log("hum");
-        console.log(this.currentResults);
-        console.log("aa");
+        //console.log(this.currentResults);
         return this.currentResults;
     }
 
