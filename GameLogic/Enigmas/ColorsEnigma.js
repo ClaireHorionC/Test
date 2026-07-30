@@ -1,6 +1,6 @@
 import { Enigma } from './Enigma.js';
-import inputManagerInstance from '../Inputs/InputManager.js';
-import { ENIGMA_IDS } from '../Utils/Constant.js';
+import inputManagerInstance from '../../Inputs/InputManager.js';
+import { ENIGMA_IDS } from '../../Utils/Constant.js';
 
 
 export class ColorsEnigma extends Enigma {

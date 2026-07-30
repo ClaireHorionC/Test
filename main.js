@@ -1,4 +1,4 @@
-import gameEngineInstance from './Core/GameEngine.js';
+import gameEngineInstance from './GameLogic/GameEngine.js';
 import uiManagerInstance from './UI/UIManager.js';
 import inputManagerInstance from './Inputs/InputManager.js';
 

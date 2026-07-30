@@ -1,6 +1,6 @@
-import gameEngineInstance from '../Core/GameEngine.js'
+import gameEngineInstance from '../GameEngine.js'
 
-import uiManagerInstance from '../UI/UIManager.js';
+import uiManagerInstance from '../../UI/UIManager.js';
 
 export class Enigma {
     /**

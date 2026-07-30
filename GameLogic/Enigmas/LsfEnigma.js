@@ -1,8 +1,8 @@
 import { Enigma } from './Enigma.js';
-import { ENIGMA_IDS } from '../Utils/Constant.js';
+import { ENIGMA_IDS } from '../../Utils/Constant.js';
 
-import inputManagerInstance from '../Inputs/InputManager.js';
-import uiManagerInstance from '../UI/UIManager.js';
+import inputManagerInstance from '../../Inputs/InputManager.js';
+import uiManagerInstance from '../../UI/UIManager.js';
 
 
 export class LsfEnigma extends Enigma {

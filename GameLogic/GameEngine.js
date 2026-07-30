@@ -1,8 +1,8 @@
 import inputManagerInstance from '../Inputs/InputManager.js';
 import uiManagerInstance from '../UI/UIManager.js';
-import { LsfEnigma } from '../Enigmas/LsfEnigma.js';
-import { ArucoEnigma } from '../Enigmas/ArucoEnigma.js';
-import { ColorsEnigma } from '../Enigmas/ColorsEnigma.js';
+import { LsfEnigma } from './Enigmas/LsfEnigma.js';
+import { ArucoEnigma } from './Enigmas/ArucoEnigma.js';
+import { ColorsEnigma } from './Enigmas/ColorsEnigma.js';
 // import { NetworkManager } from '../Network/NetworkManager.js';
 import { ENIGMA_STATUS } from '../Utils/Constant.js';
 import { ENIGMA_IDS } from '../Utils/Constant.js';

@@ -6,7 +6,7 @@ import { PanelManager } from './PanelUI/PanelManager.js';
 
 import { ENIGMA_IDS } from '../Utils/Constant.js';
 
-import gameEngineInstance from '../Core/GameEngine.js'
+import gameEngineInstance from '../GameLogic/GameEngine.js'
 import { TerminalManager } from './TerminalManager.js';
 
 

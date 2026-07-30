@@ -1,4 +1,4 @@
-import gameEngineInstance from '../Core/GameEngine.js';
+import gameEngineInstance from '../GameLogic/GameEngine.js';
 import { ENIGMA_IDS } from '../Utils/Constant.js';
 
 import { showClueAlert } from './AlertManager.js';
