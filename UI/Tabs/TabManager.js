@@ -76,18 +76,19 @@ export class TabManager {
     }
 
     displayOrNotWebcam(tabId) {
-        // 3. Gestion de la Caméra Globale
         const tabsWithWebcam = [ENIGMA_IDS.LSF, ENIGMA_IDS.ARUCO, ENIGMA_IDS.COLORS];
-        if (!(tabId === 'welcome')) { //security so that we don't check gameEngineInstance in the welcome page (gameEngineInstance has yet to start)
-            if (this.webcamContainer) {
-                if (tabsWithWebcam && !gameEngineInstance.dictionnaryOfEnigmas[tabId].isResolved) {
-                    this.webcamContainer.style.display = "block";
-                } else {
-                    this.webcamContainer.style.display = "none";
-                }
-            } else {
-                console.log("DEBUG : webcamcontainer is not defined anymore");
-            }
+
+        if (tabId === 'welcome') return; //security so that we don't check gameEngineInstance in the welcome page (gameEngineInstance has yet to start)
+
+        if (!this.webcamContainer) {
+            console.log("DEBUG : webcamcontainer is not defined anymore");
+            return;
+        }
+
+        if (tabsWithWebcam.includes(tabId) && !gameEngineInstance.dictionnaryOfEnigmas[tabId].isResolved) {
+            this.webcamContainer.style.display = "block";
+        } else {
+            this.webcamContainer.style.display = "none";
         }
     }
 
