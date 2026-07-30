@@ -1,0 +1,94 @@
+/* --- Onglet Aide / Chatbot --- */
+
+#panel-chatbot {
+    /* display: flex; */
+    flex-direction: column;
+    align-items: center;
+    height: 100%;
+    padding: 20px;
+    box-sizing: border-box;
+    font-family: 'Inter', 'Segoe UI', Arial, sans-serif;
+}
+
+.chat-aide {
+    width: min(900px, 95%);
+    height: 65vh;
+    margin-bottom: 20px;
+    padding: 18px;
+    background-color: #f4f6f8;
+    /* fond clair */
+    border: 1px solid #d9dde2;
+    border-radius: 14px;
+    overflow-y: auto;
+    box-sizing: border-box;
+    box-shadow: inset 0 0 8px rgba(0, 0, 0, 0.03);
+}
+
+.chat-aide .message {
+    margin: 10px 0;
+    padding: 10px 16px;
+    border-radius: 16px;
+    max-width: 65%;
+    line-height: 1.4;
+    font-size: 15px;
+    word-wrap: break-word;
+}
+
+.chat-aide .message.bot {
+    background-color: #e4ecf3;
+    /* bulle claire */
+    color: #17324d;
+    /* texte bleu foncé */
+    border-bottom-left-radius: 4px;
+}
+
+.chat-aide .message.user {
+    background-color: #17324d;
+    /* bulle bleu foncé */
+    color: #f4f6f8;
+    /* texte clair */
+    margin-left: auto;
+    text-align: right;
+    border-bottom-right-radius: 4px;
+}
+
+.zone-saisie-aide {
+    width: min(900px, 95%);
+    /* display: flex; */
+    align-items: center;
+    gap: 10px;
+}
+
+.zone-saisie-aide input {
+    flex: 1;
+    padding: 10px 14px;
+    font-size: 15px;
+    color: #17324d;
+    background-color: #ffffff;
+    border: 1px solid #d9dde2;
+    border-radius: 30px;
+    outline: none;
+    transition: border-color 0.2s ease;
+}
+
+.zone-saisie-aide input:focus {
+    border-color: #3185a3;
+}
+
+.zone-saisie-aide button {
+    width: 42px;
+    height: 42px;
+    /* display: flex; */
+    justify-content: center;
+    align-items: center;
+    border: none;
+    border-radius: 50%;
+    background-color: #17324d;
+    color: #ffffff;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.zone-saisie-aide button:hover {
+    background-color: #3185a3;
+}

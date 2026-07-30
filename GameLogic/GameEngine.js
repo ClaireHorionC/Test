@@ -6,6 +6,8 @@ import { ColorsEnigma } from './Enigmas/ColorsEnigma.js';
 // import { NetworkManager } from '../Network/NetworkManager.js';
 import { ENIGMA_STATUS } from '../Utils/Constant.js';
 import { ENIGMA_IDS } from '../Utils/Constant.js';
+import { HELP_IDS } from '../Utils/Constant.js';
+
 
 import { showError } from '../UI/AlertManager.js';
 import { showVictoryScreen } from '../UI/AlertManager.js';
@@ -181,6 +183,9 @@ class GameEngine {
         this.cleanMemory(this.dictionnaryOfEnigmas[idEnigma]);
 
         this.checkFinalVictory();
+
+        uiManagerInstance.tabManager.tabs[HELP_IDS.CHATBOT].unlockTab(); //just to test, this will be erased
+
 
         this.isTransitioning = false;
     }

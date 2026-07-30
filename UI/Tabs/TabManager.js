@@ -26,7 +26,6 @@ export class TabManager {
 
         this.tabContainer = document.querySelector('.btn-tab-container');
 
-
     }
 
     loadTabs() {
@@ -35,7 +34,7 @@ export class TabManager {
             lsf: new Tab(ENIGMA_IDS.LSF, 'Langue des signes française', document.querySelector('.tab-button[data-target="lsf"]'), document.getElementById("panel-lsf"), document.getElementById("panel-lsf-victory")),
             aruco: new Tab(ENIGMA_IDS.ARUCO, 'Scanner aruco', document.querySelector('.tab-button[data-target="aruco"]'), document.getElementById("panel-aruco")),
             colors: new Tab(ENIGMA_IDS.COLORS, 'Scanner de couleurs', document.querySelector('.tab-button[data-target="colors"]'), document.getElementById("panel-colors")),
-            //aide: new Tab(HELP_IDS.CHATBOT, 'Aide', document.querySelector('.tab-button[data-target="chatbot"]'), document.getElementById("panel-chatbot")),
+            chatbot: new Tab(HELP_IDS.CHATBOT, 'Aide', document.querySelector('.tab-button[data-target="chatbot"]'), document.getElementById("panel-chatbot")),
             victoire: new Tab('victoire', 'La  victoire est vôtre', document.querySelector('.tab-button[data-target="victoire"]'), document.getElementById("panel-victoire"))
         };
     }

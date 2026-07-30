@@ -14,6 +14,8 @@
     <link rel="stylesheet" href="styles/unlockingAnimation.css">
     <link rel="stylesheet" href="styles/errorWindow.css">
     <link rel="stylesheet" href="styles/terminal.css">
+    <link rel="stylesheet" href="styles/chatbot.css">
+
 
 
 
@@ -29,6 +31,7 @@
             <button id="btn-tab-aruco" class="tab-button" data-target="aruco">Cartes aruco</button>
             <button id="btn-tab-colors" class="tab-button" data-target="colors">Scanner de
                 formes</button>
+            <button id="btn-tab-chatbot" class="tab-button" data-target="chatbot">Chatbot du futur</button>
         </div>
 
 
@@ -110,6 +113,18 @@
             <h2 style="font-size: 2.5rem;">MISSION ACCOMPLIE !</h2>
             <p style="font-size: 1.2rem; font-weight: bold;">Félicitations, votre équipe a résolu toutes les énigmes.
             </p>
+        </div>
+
+        <div id="panel-chatbot" class="view-panel">
+            <div id="chat-aide" class="chat-aide"></div>
+            <div class="zone-saisie-aide">
+                <input type="text" id="inputMessage-aide" maxlength="50" />
+                <button id="btnEnvoyer-aide" type="button">
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M2 21L23 12L2 3L2 10L17 12L2 14Z" />
+                    </svg>
+                </button>
+            </div>
         </div>
 
         <div id="panel-to-implement" class="view-panel">

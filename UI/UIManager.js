@@ -5,9 +5,13 @@ import { TabManager } from './Tabs/TabManager.js';
 import { PanelManager } from './PanelUI/PanelManager.js';
 
 import { ENIGMA_IDS } from '../Utils/Constant.js';
+import { HELP_IDS } from '../Utils/Constant.js';
+
 
 import gameEngineInstance from '../GameLogic/GameEngine.js'
 import { TerminalManager } from './TerminalManager.js';
+
+import { ChatBot } from '../GameLogic/Help/ChatBot.js';
 
 
 
@@ -22,6 +26,9 @@ class UIManager {
         this.panelManager = new PanelManager();
         this.webcamButton = new WebcamButton();
         this.terminalManager = new TerminalManager();
+
+        this.chatbotManager = new ChatBot(); //this will be removed too, it is temporary.
+        this.tabManager.tabs[HELP_IDS.CHATBOT].defineOpeningAction(() => this.chatbotManager.startIfNeeded());
 
     }
 
