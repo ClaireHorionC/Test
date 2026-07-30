@@ -9,3 +9,7 @@ export const ENIGMA_IDS = {
     COLORS: 'colors',
     ARUCO: 'aruco'
 };
+
+export const HELP_IDS = {
+    CHATBOT: 'chatbot'
+};
