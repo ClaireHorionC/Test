@@ -27,8 +27,8 @@ class UIManager {
         this.webcamButton = new WebcamButton();
         this.terminalManager = new TerminalManager();
 
-        this.chatbotManager = new ChatBot(); //this will be removed too, it is temporary.
-        this.tabManager.tabs[HELP_IDS.CHATBOT].defineOpeningAction(() => this.chatbotManager.startIfNeeded());
+        this.chatBot = new ChatBot({ panelChatbot: this.panelManager.panelChatbot });
+        this.tabManager.tabs[HELP_IDS.CHATBOT].defineOpeningAction(() => this.chatBot.startIfNeeded());
 
     }
 

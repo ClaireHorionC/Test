@@ -1,4 +1,5 @@
 import levenshtein from 'https://esm.sh/js-levenshtein';
+import { wait } from '../../Utils/UtilFunctions.js';
 
 const PASSIONS = ["volley", "tennis", "natation", "basket", "handball", "golf", "escrime", "cyclisme",
     "badminton", "musculation", "boxe", "yoga", "judo", "equitation", "danse", "football", "foot",
@@ -9,10 +10,8 @@ const PASSIONS = ["volley", "tennis", "natation", "basket", "handball", "golf", 
 
 export class ChatBot {
 
-    constructor({ chatId = "chat-aide", inputId = "inputMessage-aide", buttonId = "btnEnvoyer-aide", equipe = "A" } = {}) {
-        this.chatElement = document.getElementById(chatId);
-        this.inputElement = document.getElementById(inputId);
-        this.buttonElement = document.getElementById(buttonId);
+    constructor({ panelChatbot, equipe = "A" } = {}) {
+        this.panel = panelChatbot;
 
         this.hasStarted = false; // évite de relancer la conversation à chaque réouverture de l'onglet
         this.equipe = equipe;
@@ -136,8 +135,8 @@ export class ChatBot {
     }
 
     async startConversation() {
-        await this.addMessage("Bonjour !", "bot");
-        await this.addMessage("Je suis ton assistant personnel.", "bot");
+        this.panel.addMessage("Bonjour !", "bot");
+        await this.panel.addMessage("Je suis ton assistant personnel.", "bot");
 
         let currentState = "debut";
 
@@ -145,23 +144,23 @@ export class ChatBot {
             const state = this.states[currentState];
 
             if (currentState === "recette" || currentState === "langue") {
-                await this.addMessage(state.question, "bot");
-                await this.wait(250);
+                await this.panel.addMessage(state.question, "bot");
+                await wait(250);
                 currentState = "debut";
                 continue;
             }
 
             if (Array.isArray(state.question)) {
-                for (const message of state.question) await this.addMessage(message, "bot");
+                for (const message of state.question) await this.panel.addMessage(message, "bot");
             } else {
-                await this.addMessage(state.question, "bot");
+                await this.panel.addMessage(state.question, "bot");
             }
 
             const { original, response } = await this.waitResponseUser();
-            await this.addMessage(original, "user");
+            await this.panel.addMessage(original, "user");
 
             if (currentState === "passion" && PASSIONS.includes(response)) {
-                await this.addMessage("Il me semble qu'il ait une passion plus importante.", "bot");
+                await this.panel.addMessage("Il me semble qu'il ait une passion plus importante.", "bot");
                 continue;
             }
 
@@ -173,53 +172,19 @@ export class ChatBot {
                 if (typeof state.actions[response] === "function") await state.actions[response]();
 
                 if (currentState === "resultat") {
-                    if (this.listSuspects.length === 0) await this.addMessage("Aucun suspect ne correspond aux critères.", "bot");
-                    if (this.listSuspects.length === 1) await this.addMessage("Le coupable est: " + this.listSuspects, "bot");
-                    if (this.listSuspects.length >= 2) await this.addMessage("Les suspects sont : " + this.listSuspects.join(", "), "bot");
+                    if (this.listSuspects.length === 0) await this.panel.addMessage("Aucun suspect ne correspond aux critères.", "bot");
+                    if (this.listSuspects.length === 1) await this.panel.addMessage("Le coupable est: " + this.listSuspects, "bot");
+                    if (this.listSuspects.length >= 2) await this.panel.addMessage("Les suspects sont : " + this.listSuspects.join(", "), "bot");
                 }
             } else {
-                await this.addMessage("Désolé, je n'ai pas compris.", "bot");
+                await this.panel.addMessage("Désolé, je n'ai pas compris.", "bot");
             }
         }
     }
 
-    wait(ms) { return new Promise(resolve => setTimeout(resolve, ms)); }
-
-    async addMessage(text, classe = "bot") {
-        const div = document.createElement("div");
-        div.className = "message " + classe;
-        this.chatElement.appendChild(div);
-
-        for (const caractere of text) {
-            div.textContent += caractere;
-            this.chatElement.scrollTop = this.chatElement.scrollHeight;
-            await this.wait(30);
-        }
-        await this.wait(250);
-    }
-
-    waitResponseUser() {
-        return new Promise(resolve => {
-            const bouton = this.buttonElement;
-            const input = this.inputElement;
-
-            const send = () => {
-                const textOriginal = input.value;
-                if (textOriginal === "") return;
-
-                input.value = "";
-                bouton.removeEventListener("click", clic);
-                input.removeEventListener("keydown", enter);
-
-                resolve({ original: textOriginal, response: this.checkLevenshtein(this.normalise(textOriginal)) });
-            };
-
-            const clic = () => send();
-            const enter = (e) => { if (e.key === "Enter") send(); };
-
-            bouton.addEventListener("click", clic);
-            input.addEventListener("keydown", enter);
-        });
+    async waitResponseUser() {
+        const original = await this.panel.waitUserInput();
+        return { original, response: this.checkLevenshtein(this.normalise(original)) };
     }
 
     filterSuspects(key, value) {
