@@ -1,6 +1,9 @@
 import gameEngineInstance from '../GameLogic/GameEngine.js';
+import uiManagerInstance from './UIManager.js';
 import { ENIGMA_IDS } from '../Utils/Constant.js';
 import { HELP_IDS } from '../Utils/Constant.js';
+import { ENIGMA_STATUS } from '../../Utils/Constant.js';
+
 
 
 import { showClueAlert } from './AlertManager.js';
@@ -53,7 +56,19 @@ export class TerminalManager {
                 gameEngineInstance.activateEnigmaWithAnimation(HELP_IDS.CHATBOT);
                 setTimeout(() => this.closeTerminal(), 1500);
                 break;
-            case 'physique': // Le mot de passe choisi par le joueur
+            case 'apprentissage':
+                if (uiManagerInstance.tabManager.tabs[ENIGMA_IDS.COLORS].status === ENIGMA_STATUS.LOCKED) {
+                    this.feedbackText.innerText = "Accès autorisé : Colors déverrouillé.";
+                    this.feedbackText.style.color = "green";
+                    gameEngineInstance.activateEnigmaWithAnimation(ENIGMA_IDS.COLORS);
+                    setTimeout(() => this.closeTerminal(), 1500);
+                } else {
+                    this.feedbackText.innerText = "Enigme déjà débloquée";
+                    this.feedbackText.style.color = "orange";
+                }
+
+                break;
+            /*case 'physique': // Le mot de passe choisi par le joueur
                 this.feedbackText.innerText = "Code accepté. Déverrouillage en cours...";
                 this.feedbackText.style.color = "green";
 
@@ -64,7 +79,7 @@ export class TerminalManager {
                 setTimeout(() => {
                     showClueAlert("Bravo, tu as débloqué un nouvel indice physique !");
                 }, 1200);
-                break;
+                break;*/
             default:
                 this.feedbackText.innerText = "Code invalide. Accès refusé.";
                 this.feedbackText.style.color = "red";
