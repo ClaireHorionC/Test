@@ -53,7 +53,7 @@ export class TerminalManager {
             case 'open_chatbot':
                 this.feedbackText.innerText = "Accès autorisé : Chatbot déverrouillé.";
                 this.feedbackText.style.color = "green";
-                gameEngineInstance.activateEnigmaWithAnimation(HELP_IDS.CHATBOT);
+                uiManagerInstance.unlockNewTabWithAnimations(HELP_IDS.CHATBOT);
                 setTimeout(() => this.closeTerminal(), 1500);
                 break;
             case 'apprentissage':
