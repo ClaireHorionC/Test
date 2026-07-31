@@ -26,10 +26,7 @@ class UIManager {
         this.panelManager = new PanelManager();
         this.webcamButton = new WebcamButton();
         this.terminalManager = new TerminalManager();
-
         this.chatBot = new ChatBot({ panelChatbot: this.panelManager.panelChatbot });
-        this.tabManager.tabs[HELP_IDS.CHATBOT].defineOpeningAction(() => this.chatBot.startIfNeeded());
-
     }
 
     async initBeginningOfTheGame() { //we transition from the welcome screen with the big button to first enigmas

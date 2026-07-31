@@ -23,6 +23,8 @@ export class ChatBot {
         this.listSuspects = Object.keys(this.suspects);
         this.filterSuspects("genre", "masculin");
         this.resetResponses();
+
+        this.startIfNeeded();
     }
 
     buildSuspects() {
