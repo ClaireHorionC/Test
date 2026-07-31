@@ -15,7 +15,7 @@
     height: 65vh;
     margin-bottom: 20px;
     padding: 18px;
-    background-color: #f4f6f8;
+    background: rgba(209, 210, 214, 0.91);
     /* fond clair */
     border: 1px solid #d9dde2;
     border-radius: 14px;
@@ -35,17 +35,17 @@
 }
 
 .chat-aide .message.bot {
-    background-color: #e4ecf3;
+    background-color: #3185a3;
     /* bulle claire */
-    color: #17324d;
+    color: #ffffff;
     /* texte bleu foncé */
     border-bottom-left-radius: 4px;
 }
 
 .chat-aide .message.user {
-    background-color: #17324d;
+    background-color: #1d485b;
     /* bulle bleu foncé */
-    color: #f4f6f8;
+    color: #ffffff;
     /* texte clair */
     margin-left: auto;
     text-align: right;
