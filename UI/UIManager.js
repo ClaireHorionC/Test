@@ -82,7 +82,7 @@ class UIManager {
     unlockNewTabWithAnimations(idOfNewTab) {
 
         this.unlockNewTabWithoutAnimations(idOfNewTab);
-        this.animations.launchUnlockingEnigmaAnimation(idOfNewTab); //we make an animation
+        this.animations.launchUnlockingEnigmaAnimation(idOfNewTab);
 
     }
 
