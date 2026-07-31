@@ -184,9 +184,6 @@ class GameEngine {
 
         this.checkFinalVictory();
 
-        uiManagerInstance.tabManager.tabs[HELP_IDS.CHATBOT].unlockTab(); //just to test, this will be erased
-
-
         this.isTransitioning = false;
     }
 

@@ -1,5 +1,7 @@
 import gameEngineInstance from '../GameLogic/GameEngine.js';
 import { ENIGMA_IDS } from '../Utils/Constant.js';
+import { HELP_IDS } from '../Utils/Constant.js';
+
 
 import { showClueAlert } from './AlertManager.js';
 import { playMysteriousSwell } from '../Utils/Audio/AudioSynth.js';
@@ -45,11 +47,10 @@ export class TerminalManager {
         const codeText = this.inputField.value.trim().toLowerCase();
 
         switch (codeText) {
-            case 'open_aruco':
-                this.feedbackText.innerText = "Accès autorisé : Scanner Aruco déverrouillé.";
+            case 'open_chatbot':
+                this.feedbackText.innerText = "Accès autorisé : Chatbot déverrouillé.";
                 this.feedbackText.style.color = "green";
-                // Action : On débloque une énigme à distance
-                gameEngineInstance.activateEnigmaWithAnimation(ENIGMA_IDS.ARUCO);
+                gameEngineInstance.activateEnigmaWithAnimation(HELP_IDS.CHATBOT);
                 setTimeout(() => this.closeTerminal(), 1500);
                 break;
             case 'physique': // Le mot de passe choisi par le joueur
