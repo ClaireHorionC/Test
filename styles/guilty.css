@@ -1,0 +1,62 @@
+/* --- Onglet L'accusation --- */
+
+#panel-guilty {
+    padding: 20px;
+    box-sizing: border-box;
+    font-family: 'Inter', 'Segoe UI', Arial, sans-serif;
+}
+
+.zone-accusation {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    width: min(600px, 95%);
+    margin-top: 20px;
+}
+
+.zone-accusation input {
+    flex: 1;
+    padding: 12px 16px;
+    font-size: 16px;
+    color: #17324d;
+    background-color: #ffffff;
+    border: 1px solid #d9dde2;
+    border-radius: 30px;
+    outline: none;
+    transition: border-color 0.2s ease;
+}
+
+.zone-accusation input:focus {
+    border-color: #3185a3;
+}
+
+.zone-accusation button {
+    padding: 12px 24px;
+    border: none;
+    border-radius: 30px;
+    background-color: #17324d;
+    color: #ffffff;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.zone-accusation button:hover {
+    background-color: #3185a3;
+}
+
+/* --- Retour donné au joueur après une accusation --- */
+
+.feedback-guilty {
+    margin-top: 18px;
+    font-weight: bold;
+    min-height: 1.4em;
+}
+
+.feedback-guilty.wrong {
+    color: #ff8a80;
+}
+
+.feedback-guilty.right {
+    color: #69f0ae;
+}

@@ -3,6 +3,7 @@ import uiManagerInstance from '../UI/UIManager.js';
 import { LsfEnigma } from './Enigmas/LsfEnigma.js';
 import { ArucoEnigma } from './Enigmas/ArucoEnigma.js';
 import { ColorsEnigma } from './Enigmas/ColorsEnigma.js';
+import { GuiltyEnigma } from './Enigmas/GuiltyEnigma.js';
 // import { NetworkManager } from '../Network/NetworkManager.js';
 import { ENIGMA_STATUS } from '../Utils/Constant.js';
 import { ENIGMA_IDS } from '../Utils/Constant.js';
@@ -27,6 +28,9 @@ class GameEngine {
 
         this.isRunning = false;
         this.isTransitioning = false;
+
+        //first of the two conditions unlocking the guilty enigma, the second one being the LSF enigma resolved
+        this.chatbotHasFoundCulprit = false;
 
         //to lower the fps rendering (not used because it works well for now without it)
         // this.fpsTarget = 10;
@@ -72,10 +76,12 @@ class GameEngine {
         const lsf = new LsfEnigma();
         const aruco = new ArucoEnigma();
         const colors = new ColorsEnigma();
+        const guilty = new GuiltyEnigma();
 
         this.dictionnaryOfEnigmas[lsf.id] = lsf;
         this.dictionnaryOfEnigmas[aruco.id] = aruco;
         this.dictionnaryOfEnigmas[colors.id] = colors;
+        this.dictionnaryOfEnigmas[guilty.id] = guilty;
 
         console.log(`GameEngine: ${Object.keys(this.dictionnaryOfEnigmas).length} énigmes chargées dans le dictionnaire.`);
 
@@ -117,8 +123,11 @@ class GameEngine {
             enigma.start(); // S'il y a des choses à initialiser dans la classe
             this.activeEnigmas.push(enigma);
             console.log(`▶️ Énigme [${idEnigma}] ajoutée au pool actif.`);
+        } else if (!enigma) {
+            //normal for an enigma whose tab exists but whose logic is not written yet (the final one for instance)
+            console.log(`DEBUG : l'énigme [${idEnigma}] n'a pas de classe, seul son onglet est déverrouillé.`);
         } else {
-            console.log("DEBUG : could not activate this enigma");
+            console.log(`DEBUG : l'énigme [${idEnigma}] est déjà dans le pool actif.`);
         }
     }
 
@@ -179,9 +188,36 @@ class GameEngine {
 
         this.cleanMemory(this.dictionnaryOfEnigmas[idEnigma]);
 
+        this.tryUnlockGuiltyEnigma(); //an enigma has just been resolved, maybe it was the LSF one
+
         this.checkFinalVictory();
 
         this.isTransitioning = false;
+    }
+
+    /**
+     * Called by the chatbot the moment it announces a single culprit ("Le coupable est: ").
+     */
+    notifyChatbotFoundCulprit() {
+        this.chatbotHasFoundCulprit = true;
+        this.tryUnlockGuiltyEnigma();
+    }
+
+    /**
+     * The guilty enigma needs TWO conditions : the LSF enigma resolved AND the chatbot having announced a culprit.
+     * They can happen in any order, so we check both again each time one of them becomes true.
+     */
+    tryUnlockGuiltyEnigma() {
+        const guiltyTab = uiManagerInstance.tabManager.tabs[ENIGMA_IDS.GUILTY];
+
+        if (!guiltyTab || guiltyTab.status !== ENIGMA_STATUS.LOCKED) return; // already unlocked, nothing to do
+
+        if (!this.chatbotHasFoundCulprit) return;
+
+        const lsf = this.dictionnaryOfEnigmas[ENIGMA_IDS.LSF];
+        if (!lsf || !lsf.isResolved) return;
+
+        this.activateEnigmaWithAnimation(ENIGMA_IDS.GUILTY);
     }
 
     /**

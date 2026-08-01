@@ -1,5 +1,8 @@
 import levenshtein from 'https://esm.sh/js-levenshtein';
-import { wait } from '../../Utils/UtilFunctions.js';
+import { wait, normalizeText } from '../../Utils/UtilFunctions.js';
+import { SUSPECTS_BY_TEAM, CURRENT_TEAM } from '../../Utils/Constant.js';
+
+import gameEngineInstance from '../GameEngine.js';
 
 const PASSIONS = ["volley", "tennis", "natation", "basket", "handball", "golf", "escrime", "cyclisme",
     "badminton", "musculation", "boxe", "yoga", "judo", "equitation", "danse", "football", "foot",
@@ -10,7 +13,7 @@ const PASSIONS = ["volley", "tennis", "natation", "basket", "handball", "golf", 
 
 export class ChatBot {
 
-    constructor({ panelChatbot, equipe = "A" } = {}) {
+    constructor({ panelChatbot, equipe = CURRENT_TEAM } = {}) {
         this.panel = panelChatbot;
 
         this.hasStarted = false; // évite de relancer la conversation à chaque réouverture de l'onglet
@@ -28,15 +31,7 @@ export class ChatBot {
     }
 
     buildSuspects() {
-        const parEquipe = {
-            A: ["Elise", "Oliver", "Michael", "Ines", "Theo", "Juliette", "Charlotte", "Antoine", "Maureen", "Ryan"],
-            B: ["Heloise", "Louis", "Mike", "Irina", "Timothy", "Julie", "Clea", "Arthur", "Magalie", "Redouane"],
-            C: ["Lea", "Lucien", "Lucas", "Adele", "Adam", "Leonie", "Daria", "Pierre", "Leila", "Gabriel"],
-            D: ["Alicia", "Noe", "Ugo", "Samia", "Sacha", "Ida", "Maria", "Camille", "Sara", "Nathan"],
-            E: ["Jade", "Jules", "Noah", "Alba", "Martin", "Emma", "Esther", "Raphael", "Lina", "Liam"],
-            F: ["Agathe", "Mathis", "Tom", "Iris", "Eliott", "Lena", "Lou", "Ethan", "Nour", "Paul"]
-        };
-        const prenoms = parEquipe[this.equipe];
+        const prenoms = SUSPECTS_BY_TEAM[this.equipe]; //shared with GuiltyEnigma, which uses the first name of the list as the culprit
         this.prenoms = prenoms;
 
         this.suspects = {
@@ -124,7 +119,7 @@ export class ChatBot {
         this.possibilities = new Set();
         for (const state of Object.keys(this.states)) {
             for (const tr of Object.keys(this.states[state].transitions)) {
-                this.possibilities.add(this.normalise(tr));
+                this.possibilities.add(normalizeText(tr));
             }
         }
         for (const passion of PASSIONS) this.possibilities.add(passion);
@@ -175,7 +170,10 @@ export class ChatBot {
 
                 if (currentState === "resultat") {
                     if (this.listSuspects.length === 0) await this.panel.addMessage("Aucun suspect ne correspond aux critères.", "bot");
-                    if (this.listSuspects.length === 1) await this.panel.addMessage("Le coupable est: " + this.listSuspects, "bot");
+                    if (this.listSuspects.length === 1) {
+                        await this.panel.addMessage("Le coupable est: " + this.listSuspects, "bot");
+                        gameEngineInstance.notifyChatbotFoundCulprit(); //one of the two conditions needed to unlock the guilty enigma
+                    }
                     if (this.listSuspects.length >= 2) await this.panel.addMessage("Les suspects sont : " + this.listSuspects.join(", "), "bot");
                 }
             } else {
@@ -186,7 +184,7 @@ export class ChatBot {
 
     async waitResponseUser() {
         const original = await this.panel.waitUserInput();
-        return { original, response: this.checkLevenshtein(this.normalise(original)) };
+        return { original, response: this.checkLevenshtein(normalizeText(original)) };
     }
 
     filterSuspects(key, value) {
@@ -208,10 +206,6 @@ export class ChatBot {
         this.resetSuspects();
         this.resetResponses();
         this.resetExplanation();
-    }
-
-    normalise(text) {
-        return text.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/[.,!?;:()'"-]/g, "");
     }
 
     checkLevenshtein(input) {
