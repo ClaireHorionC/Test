@@ -15,6 +15,7 @@
     <link rel="stylesheet" href="styles/errorWindow.css">
     <link rel="stylesheet" href="styles/terminal.css">
     <link rel="stylesheet" href="styles/chatbot.css">
+    <link rel="stylesheet" href="styles/guilty.css">
 
 
 
@@ -32,6 +33,8 @@
             <button id="btn-tab-colors" class="tab-button" data-target="colors">Scanner de
                 formes</button>
             <button id="btn-tab-chatbot" class="tab-button" data-target="chatbot">Chatbot du futur</button>
+            <button id="btn-tab-guilty" class="tab-button" data-target="guilty">L'accusation</button>
+            <button id="btn-tab-final" class="tab-button" data-target="final">Énigme finale</button>
         </div>
 
 
@@ -125,6 +128,28 @@
                     </svg>
                 </button>
             </div>
+        </div>
+
+        <div id="panel-guilty" class="view-panel">
+            <h2>Qui accusez-vous ?</h2>
+            <p>Le chatbot a livré son verdict, mais une IA peut se tromper. Entrez le nom de la personne que vous
+                jugez coupable.</p>
+            <div class="zone-accusation">
+                <input type="text" id="inputMessage-guilty" maxlength="30" placeholder="Nom du coupable"
+                    autocomplete="off" />
+                <button id="btnAccuser-guilty" type="button">Accuser</button>
+            </div>
+            <p id="feedback-guilty" class="feedback-guilty"></p>
+        </div>
+
+        <div id="panel-guilty-victory" class="view-panel">
+            <h2>Accusation confirmée</h2>
+            <p>Le coupable a été démasqué. L'accès à l'énigme finale est déverrouillé.</p>
+        </div>
+
+        <div id="panel-final" class="view-panel">
+            <h2>Énigme finale</h2>
+            <p>Cette énigme n'a pas encore été implémentée.</p>
         </div>
 
         <div id="panel-to-implement" class="view-panel">
