@@ -1,7 +1,7 @@
 import gameEngineInstance from '../GameLogic/GameEngine.js';
 import uiManagerInstance from './UIManager.js';
 import { ENIGMA_IDS } from '../Utils/Constant.js';
-import { HELP_IDS } from '../Utils/Constant.js';
+import { HELP_IDS } from '../../Utils/Constant.js';
 import { ENIGMA_STATUS } from '../../Utils/Constant.js';
 
 
