@@ -125,8 +125,8 @@ export class ColorsRecognizer {
     analyserCouleurHSV(h, s, v) {
         if (s < 40 || v < 40) return "Inconnue";
 
-        if (h >= 5 && h <= 25) {
-            if (v < 210) return "Marron";
+        if (h <= 35) {
+            if (v < 170) return "Marron";
             else return "Orange";
         }
         else if (h > 35 && h <= 80) {
