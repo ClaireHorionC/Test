@@ -16,6 +16,7 @@
     <link rel="stylesheet" href="styles/terminal.css">
     <link rel="stylesheet" href="styles/chatbot.css">
     <link rel="stylesheet" href="styles/guilty.css">
+    <link rel="stylesheet" href="styles/maze.css">
 
 
 
@@ -109,6 +110,24 @@
 
         <div id="panel-colors" class="view-panel">
             <h2>Scanner de couleurs</h2>
+
+            <div class="maze-layout">
+                <div id="maze-grid" class="maze-grid"></div>
+
+                <div class="maze-side">
+                    <div class="countdown">
+                        <svg class="countdown-svg" viewBox="0 0 80 80">
+                            <circle class="countdown-track" cx="40" cy="40" r="34" />
+                            <circle id="countdown-ring" class="countdown-ring" cx="40" cy="40" r="34" />
+                        </svg>
+                        <span id="countdown-value" class="countdown-value">3</span>
+                    </div>
+
+                    <div id="colors-chips" class="colors-chips"></div>
+
+                    <p id="maze-feedback" class="maze-feedback"></p>
+                </div>
+            </div>
         </div>
 
 
