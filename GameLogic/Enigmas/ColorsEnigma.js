@@ -1,128 +1,148 @@
 import { Enigma } from './Enigma.js';
-import inputManagerInstance from '../../Inputs/InputManager.js';
+import { Maze, DIRECTIONS } from '../MiniGames/Maze.js';
 import { ENIGMA_IDS } from '../../Utils/Constant.js';
 
+import inputManagerInstance from '../../Inputs/InputManager.js';
+import uiManagerInstance from '../../UI/UIManager.js';
+
+// One action is committed every 3 seconds, whatever the players do in between.
+const TICK_MS = 3000;
+
+/**
+ * The mapping the players have to discover by themselves : hiding ONE circle moves the character.
+ * Nothing in the interface reveals it, they can only learn it by trying and watching the result.
+ * Permuting these four values is all it takes to give the second character different controls.
+ */
+const COLOR_TO_DIRECTION = {
+    "Marron": DIRECTIONS.UP,
+    "Bleu-Vert": DIRECTIONS.DOWN,
+    "Orange": DIRECTIONS.LEFT,
+    "Rose foncé": DIRECTIONS.RIGHT
+};
+
+const COLORS_USED = Object.keys(COLOR_TO_DIRECTION);
+
+/**
+ * '#' wall, '.' floor, 'S' start, 'E' exit.
+ * The shortest way out is 12 moves (bas, droite, haut, droite, bas) and the corridor going down from
+ * the start is a dead end, so a wrong guess costs moves without ever locking the players out.
+ */
+const MAZE_LAYOUT = [
+    "#######",
+    "#S#...#",
+    "#.#.#.#",
+    "#...#.#",
+    "#.###.#",
+    "#...#E#",
+    "#######"
+];
 
 export class ColorsEnigma extends Enigma {
+
     constructor() {
-        super('colors', "Scanner de Couleurs");
+        super(ENIGMA_IDS.COLORS, "Scanner de Couleurs");
 
+        this.maze = new Maze(MAZE_LAYOUT);
 
+        this.panel = uiManagerInstance.panelManager.panelColors;
+        this.panel.buildMaze(this.maze);
+        this.panel.buildChips(COLORS_USED);
 
-        // --- Gestion de l'énigme par étapes ---
-        this.currentStage = 0;
-        this.stageStartTime = null;
-        this.lastCountdownSeconds = -1;
+        this.resetWindow();
+    }
 
-        // Configuration des conditions pour chaque étape
-        this.stageRequirements = [
-            {
-                name: "Étape 1 : Détecter toutes les couleurs (Marron, Bleu, Bleu-Vert, Orange, Rose foncé)",
-                required: ["Marron", "Bleu", "Bleu-Vert", "Orange", "Rose foncé"],
-                forbidden: []
-            },
-            {
-                name: "Étape 2 : Cacher le Rose foncé",
-                required: ["Marron", "Bleu", "Bleu-Vert", "Orange"],
-                forbidden: ["Rose foncé"]
-            },
-            {
-                name: "Étape 3 : Cacher le Rose foncé ET l'Orange",
-                required: ["Marron", "Bleu", "Bleu-Vert"],
-                forbidden: ["Rose foncé", "Orange"]
-            }
-        ];
+    start() {
+        super.start();
+
+        this.maze.reset();
+        this.panel.updatePlayerPosition(this.maze);
+
+        this.resetWindow();
     }
 
     /**
-     * La boucle appelée en continu par le GameEngine quand l'onglet est actif
+     * Starts a new 3 seconds window : we count, frame by frame, how often each circle is hidden.
      */
+    resetWindow(now = Date.now()) {
+        this.windowStartTime = now;
+        this.framesInWindow = 0;
+        this.hiddenFrames = {};
+
+        for (const color of COLORS_USED) this.hiddenFrames[color] = 0;
+    }
+
     update() {
         if (this.isResolved) return;
-        inputManagerInstance.update(this.id); //do updateColors which is in the recognizer
-        const playerState = inputManagerInstance.getState(); //get the list of colors detected
+
+        inputManagerInstance.update(this.id);
+        const playerState = inputManagerInstance.getState();
         this.checkCondition(playerState);
     }
 
-    /**
-     * Vérifie l'image actuelle de la webcam
-     */
     checkCondition(playerState) {
+        const now = Date.now();
+        const elapsed = now - this.windowStartTime;
 
-        if (this.stageStartTime === null) {
-            this.stageStartTime = Date.now(); // Déclenchement du premier chrono, pas idéal de le commencer ici mais bon
+        // the tab was left open in the background : we drop the window instead of committing a very old action
+        if (elapsed > 2 * TICK_MS) {
+            this.resetWindow(now);
+            return;
         }
 
-        // Gestion du timer de 5 secondes (5000 ms)
-        const elapsed = Date.now() - this.stageStartTime;
-        const remainingSeconds = Math.ceil((5000 - elapsed) / 1000);
+        this.recordHiddenColors(playerState);
 
-        // Affichage du compte à rebours dans la console
-        if (remainingSeconds !== this.lastCountdownSeconds && remainingSeconds >= 0) {
-            console.log(`⏱️ Évaluation de l'étape dans : ${remainingSeconds}s...`);
-            this.lastCountdownSeconds = remainingSeconds;
+        const remaining = Math.max(0, TICK_MS - elapsed);
+        this.panel.updateCountdown(remaining / TICK_MS, Math.ceil(remaining / 1000));
+        this.panel.updateColorsDetected(playerState.colors);
+
+        if (elapsed >= TICK_MS) {
+            this.commitAction();
+            this.resetWindow(now);
         }
-
-        // Fin des 5 secondes -> Évaluation
-        if (elapsed >= 5000) {
-            this.evaluerEtape(playerState);
-        }
-
     }
 
     /**
-     * Évalue si les conditions de l'étape actuelle sont respectées
+     * A single frame is never trusted : the detection flickers, so every frame of the window votes.
      */
-    evaluerEtape(playerState) {
-        const rules = this.stageRequirements[this.currentStage];
-        let stepPassed = true;
+    recordHiddenColors(playerState) {
+        const colorsSeen = (playerState.colors instanceof Set) ? playerState.colors : new Set();
 
-        // 1. Vérification des couleurs requises
-        for (const reqColor of rules.required) {
-            if (!playerState.colors.has(reqColor)) {
-                stepPassed = false;
-                break;
-            }
-        }
+        this.framesInWindow++;
 
-        // 2. Vérification des couleurs interdites
-        if (stepPassed) {
-            for (const forbColor of rules.forbidden) {
-                if (playerState.colors.has(forbColor)) {
-                    stepPassed = false;
-                    break;
-                }
-            }
-        }
-
-        if (stepPassed) {
-            // Réussite de l'étape
-            console.log(`✅ Étape validée avec succès !`);
-            this.currentStage++;
-
-            if (this.currentStage >= this.stageRequirements.length) {
-                // Victoire totale !
-                console.log("🏆 VICTOIRE ! Vous avez résolu l'énigme des couleurs !");
-                this.isResolved = true;
-                this.onSuccess();
-            } else {
-                // Passage à l'étape suivante
-                console.log(`➡️ Passage à l'étape suivante : ${this.stageRequirements[this.currentStage].name}`);
-                this.stageStartTime = Date.now();
-                this.lastCountdownSeconds = -1;
-            }
-        } else {
-            // Échec -> Retour au début
-            console.log(`❌ ÉCHEC ! Les conditions requises n'ont pas été respectées.`);
-            console.log(`Couleurs détectées au moment du check :`, Array.from(playerState.colors));
-            console.log(`🔄 Retour au début de l'énigme...`);
-
-            this.currentStage = 0;
-            this.stageStartTime = Date.now();
-            this.lastCountdownSeconds = -1;
-            console.log(`🚀 ${this.stageRequirements[0].name}`);
+        for (const color of COLORS_USED) {
+            if (!colorsSeen.has(color)) this.hiddenFrames[color]++;
         }
     }
 
+    /**
+     * A circle counts as hidden when it was missing for most of the window. Exactly one hidden circle
+     * means one move, anything else is ignored.
+     */
+    commitAction() {
+        if (this.framesInWindow === 0) return;
 
+        //if more than 1/4 of the time the circle is not seen it is considered hidden
+        const hiddenColors = COLORS_USED.filter(color => this.hiddenFrames[color] > this.framesInWindow / 4);
+
+        if (hiddenColors.length !== 1) {
+            this.panel.showNoAction(hiddenColors.length);
+            return;
+        }
+
+        const result = this.maze.tryMove(COLOR_TO_DIRECTION[hiddenColors[0]]);
+
+        if (!result.moved) {
+            this.panel.showBlocked();
+            return;
+        }
+
+        this.panel.updatePlayerPosition(this.maze);
+
+        if (result.finished) {
+            this.panel.showVictory();
+            this.onSuccess();
+        } else {
+            this.panel.showMoved();
+        }
+    }
 }
