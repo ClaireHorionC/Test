@@ -3,6 +3,7 @@ import { PanelWelcome } from "./PanelWelcome.js";
 import { PanelChatbot } from "./PanelChatbot.js";
 import { PanelGuilty } from "./PanelGuilty.js";
 import { PanelColors } from "./PanelColors.js";
+import { PanelFinal } from "./PanelFinal.js";
 
 export class PanelManager {
     constructor() {
@@ -11,5 +12,6 @@ export class PanelManager {
         this.panelChatbot = new PanelChatbot();
         this.panelGuilty = new PanelGuilty();
         this.panelColors = new PanelColors();
+        this.panelFinal = new PanelFinal();
     }
 }

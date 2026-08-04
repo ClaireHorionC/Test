@@ -36,7 +36,7 @@ export class TabManager {
             colors: new Tab(ENIGMA_IDS.COLORS, 'Scanner de couleurs', document.querySelector('.tab-button[data-target="colors"]'), document.getElementById("panel-colors")),
             chatbot: new Tab(HELP_IDS.CHATBOT, 'Aide', document.querySelector('.tab-button[data-target="chatbot"]'), document.getElementById("panel-chatbot")),
             guilty: new Tab(ENIGMA_IDS.GUILTY, "L'accusation", document.querySelector('.tab-button[data-target="guilty"]'), document.getElementById("panel-guilty"), document.getElementById("panel-guilty-victory")),
-            final: new Tab(ENIGMA_IDS.FINAL, 'Énigme finale', document.querySelector('.tab-button[data-target="final"]'), document.getElementById("panel-final")),
+            final: new Tab(ENIGMA_IDS.FINAL, 'Énigme finale', document.querySelector('.tab-button[data-target="final"]'), document.getElementById("panel-final"), document.getElementById("panel-final-victory")),
             victoire: new Tab('victoire', 'La  victoire est vôtre', document.querySelector('.tab-button[data-target="victoire"]'), document.getElementById("panel-victoire"))
         };
     }

@@ -4,6 +4,7 @@ import { LsfEnigma } from './Enigmas/LsfEnigma.js';
 import { ArucoEnigma } from './Enigmas/ArucoEnigma.js';
 import { ColorsEnigma } from './Enigmas/ColorsEnigma.js';
 import { GuiltyEnigma } from './Enigmas/GuiltyEnigma.js';
+import { FinalEnigma } from './Enigmas/FinalEnigma.js';
 // import { NetworkManager } from '../Network/NetworkManager.js';
 import { ENIGMA_STATUS } from '../Utils/Constant.js';
 import { ENIGMA_IDS } from '../Utils/Constant.js';
@@ -77,11 +78,13 @@ class GameEngine {
         const aruco = new ArucoEnigma();
         const colors = new ColorsEnigma();
         const guilty = new GuiltyEnigma();
+        const final = new FinalEnigma();
 
         this.dictionnaryOfEnigmas[lsf.id] = lsf;
         this.dictionnaryOfEnigmas[aruco.id] = aruco;
         this.dictionnaryOfEnigmas[colors.id] = colors;
         this.dictionnaryOfEnigmas[guilty.id] = guilty;
+        this.dictionnaryOfEnigmas[final.id] = final;
 
         console.log(`GameEngine: ${Object.keys(this.dictionnaryOfEnigmas).length} énigmes chargées dans le dictionnaire.`);
 
@@ -220,17 +223,19 @@ class GameEngine {
     }
 
     /**
-     * We check here if the 2 enigmas at the end of each way are resolved, if so we show the final victory screen
+     * The game is over once the final enigma is solved : it is the last one of the chain.
      */
     checkFinalVictory() {
-        const arucoFini = uiManagerInstance.tabManager.tabs[ENIGMA_IDS.ARUCO].statut === 'resolu';
-        // const chemin2Fini = uiManagerInstance.onglets['enigmeChemin2'].statut === 'resolu';
+        const final = this.dictionnaryOfEnigmas[ENIGMA_IDS.FINAL];
 
-        if (arucoFini /* && chemin2Fini */) {
-            uiManagerInstance.animations.launchUnlockingEnigmaAnimation('victoire');
-            showVictoryScreen();
-            this.isRunning = false;
-        }
+        if (!final || !final.isResolved) return;
+
+        //the victory tab has no button in the navigation bar, so we open it by hand instead of calling unlockTab()
+        uiManagerInstance.tabManager.tabs['victoire'].status = ENIGMA_STATUS.AVAILABLE;
+
+        uiManagerInstance.animations.launchUnlockingEnigmaAnimation('victoire');
+        showVictoryScreen();
+        this.isRunning = false;
     }
 
     cleanMemory(enigmaToComplete) {
