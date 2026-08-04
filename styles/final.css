@@ -1,0 +1,110 @@
+/* --- Énigme finale : le code d'accès --- */
+
+#panel-final {
+    padding: 20px;
+    box-sizing: border-box;
+    font-family: 'Inter', 'Segoe UI', Arial, sans-serif;
+}
+
+.final-instruction {
+    max-width: 640px;
+}
+
+.final-visual {
+    display: block;
+    width: min(520px, 90%);
+    margin: 20px 0;
+    border: 1px solid rgba(49, 133, 163, 0.5);
+    border-radius: 14px;
+    box-shadow: 0 0 25px rgba(0, 127, 139, 0.35);
+}
+
+/* --- La saisie du code --- */
+
+.zone-code-final {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    width: min(600px, 95%);
+    margin-top: 20px;
+}
+
+.zone-code-final input {
+    flex: 1;
+    padding: 12px 18px;
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 1.3rem;
+    letter-spacing: 3px;
+    text-align: center;
+    color: #17324d;
+    background-color: #ffffff;
+    border: 1px solid #d9dde2;
+    border-radius: 30px;
+    outline: none;
+    transition: border-color 0.2s ease;
+}
+
+.zone-code-final input:focus {
+    border-color: #3185a3;
+}
+
+.zone-code-final input:disabled {
+    background-color: #cfd8dc;
+    color: #78909c;
+    cursor: not-allowed;
+}
+
+.zone-code-final button {
+    padding: 12px 24px;
+    border: none;
+    border-radius: 30px;
+    background-color: #17324d;
+    color: #ffffff;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.zone-code-final button:hover:not(:disabled) {
+    background-color: #3185a3;
+}
+
+.zone-code-final button:disabled {
+    background-color: #78909c;
+    cursor: not-allowed;
+}
+
+/* --- Les retours affichés au joueur --- */
+
+.final-tries {
+    margin-top: 18px;
+    font-weight: bold;
+    min-height: 1.4em;
+    color: #b0bec5;
+}
+
+/* Dernière tentative : on prévient clairement */
+.final-tries.last {
+    color: #ffb74d;
+}
+
+.final-tries.failed {
+    color: #ff8a80;
+}
+
+.final-time {
+    font-weight: bold;
+    min-height: 1.4em;
+    color: #ff8a80;
+}
+
+.final-result {
+    font-size: 1.6rem;
+    font-weight: bold;
+    min-height: 1.4em;
+}
+
+.final-result.success {
+    color: #69f0ae;
+    text-shadow: 0 0 12px rgba(105, 240, 174, 0.6);
+}
