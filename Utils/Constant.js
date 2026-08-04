@@ -16,6 +16,10 @@ export const HELP_IDS = {
     CHATBOT: 'chatbot'
 };
 
+// Combien de temps les bonnes lettres doivent rester détectées pour valider l'énigme LSF.
+// Partagé entre l'énigme (la règle) et le panneau (la barre et la durée du crescendo), pour qu'ils ne se désynchronisent pas.
+export const LSF_HOLD_MS = 2000;
+
 // The team playing this session. It decides which list of suspects is used by the chatbot and by the guilty enigma.
 export const CURRENT_TEAM = "A";
 

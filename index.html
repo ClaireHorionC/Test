@@ -18,6 +18,7 @@
     <link rel="stylesheet" href="styles/guilty.css">
     <link rel="stylesheet" href="styles/maze.css">
     <link rel="stylesheet" href="styles/final.css">
+    <link rel="stylesheet" href="styles/lsf.css">
 
 
 
@@ -95,6 +96,11 @@
         <div id="panel-lsf" class="view-panel">
             <h2>LSF)</h2>
             <div id="lsf-sign-box" class="output-box">En atteinte de signes à détecter..</div>
+
+            <!-- se remplit tant que les bonnes lettres restent détectées, se vide dès qu'on les perd -->
+            <div class="lsf-hold">
+                <div id="lsf-hold-bar" class="lsf-hold-bar"></div>
+            </div>
         </div>
 
         <div id="panel-lsf-victory" class="view-panel">

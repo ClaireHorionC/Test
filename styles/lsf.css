@@ -1,0 +1,22 @@
+/* --- Énigme LSF : la barre de maintien des lettres --- */
+
+.lsf-hold {
+    width: min(600px, 95%);
+    height: 14px;
+    margin-top: 18px;
+    background: rgba(8, 20, 30, 0.8);
+    border: 1px solid rgba(49, 133, 163, 0.5);
+    border-radius: 30px;
+    overflow: hidden;
+}
+
+.lsf-hold-bar {
+    width: 0%;
+    height: 100%;
+    border-radius: 30px;
+    /* du teal vers le vert : plus la barre avance, plus on est proche de la validation */
+    background: linear-gradient(90deg, #007f8b, #00c8dc 60%, #69f0ae);
+    box-shadow: 0 0 12px rgba(0, 200, 220, 0.8);
+    /* court, sinon la barre traîne derrière la détection au lieu de la suivre */
+    transition: width 0.08s linear;
+}

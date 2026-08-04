@@ -1,18 +1,26 @@
 import { Enigma } from './Enigma.js';
-import { ENIGMA_IDS } from '../../Utils/Constant.js';
+import { ENIGMA_IDS, LSF_HOLD_MS } from '../../Utils/Constant.js';
 
 import inputManagerInstance from '../../Inputs/InputManager.js';
 import uiManagerInstance from '../../UI/UIManager.js';
 
+// Au-delà de cet écart entre deux frames, on considère qu'on a cessé de regarder (onglet quitté)
+// et on repart de zéro plutôt que de compter tout le temps écoulé comme du maintien.
+const MAX_GAP_MS = 500;
 
 export class LsfEnigma extends Enigma {
     constructor() {
         // On appelle le constructeur de la classe parente (Enigma)
-        super(ENIGMA_IDS.LSF, "Enigme LSF", [ENIGMA_IDS.ARUCO]); //this id (ENIGMA_IDS.LSF) is the same in UIManager, it is attached to the tab AND the Enigma 
+        super(ENIGMA_IDS.LSF, "Enigme LSF", [ENIGMA_IDS.ARUCO]); //this id (ENIGMA_IDS.LSF) is the same in UIManager, it is attached to the tab AND the Enigma
 
         // Les 4 lettres qui doivent être vues en même temps
         //this.lettresRequises = ["P", "L", "A", "N"];
         this.lettresRequises = ["P", "I"];
+
+        this.panel = uiManagerInstance.panelManager.panelLsf;
+
+        this.holdStartTime = null; // début du maintien en cours, null si les lettres ne sont pas toutes là
+        this.lastCheckTime = null;
     }
 
     update() {
@@ -20,7 +28,7 @@ export class LsfEnigma extends Enigma {
         const playerState = inputManagerInstance.getState(); //get the list of signs detected
         this.checkCondition(playerState); //check if we have all the letter required
 
-        uiManagerInstance.panelManager.panelLsf.updateGestureDebugText(playerState.gestures); //we update the box with the letters detected
+        this.panel.updateGestureDebugText(playerState.gestures); //we update the box with the letters detected
     }
 
     // Le GameEngine appelle cette fonction 15 fois par seconde
@@ -30,17 +38,36 @@ export class LsfEnigma extends Enigma {
         const gestesActuels = playerState.gestures; // Ex: ["P", "Thumb_Up", "I"]
 
         // if we don't see enough hands to form the word it is not useful to look further
-        if (gestesActuels.length < this.lettresRequises.length) {
+        const toutesPresentes = gestesActuels.length >= this.lettresRequises.length
+            && this.lettresRequises.every(lettre => gestesActuels.includes(lettre));
+
+        if (!toutesPresentes) {
+            this.cancelHold();
             return;
         }
 
-        // On vérifie que TOUTES les lettres requises sont dans le tableau des gestes actuels
-        const toutesPresentes = this.lettresRequises.every(lettre => gestesActuels.includes(lettre));
+        const now = Date.now();
 
-        if (toutesPresentes) {
+        // Reprise après une interruption (onglet quitté) : le maintien doit être continu, on recommence
+        if (this.lastCheckTime !== null && now - this.lastCheckTime > MAX_GAP_MS) {
+            this.holdStartTime = null;
+        }
+        this.lastCheckTime = now;
+
+        if (this.holdStartTime === null) this.holdStartTime = now;
+
+        const elapsed = now - this.holdStartTime;
+        this.panel.updateHoldProgress(elapsed / LSF_HOLD_MS);
+
+        if (elapsed >= LSF_HOLD_MS) {
+            this.cancelHold(); //coupe le crescendo, la fanfare de déverrouillage prend le relais
             this.onSuccess();
         }
     }
 
-
+    cancelHold() {
+        this.holdStartTime = null;
+        this.lastCheckTime = null;
+        this.panel.updateHoldProgress(0);
+    }
 }
