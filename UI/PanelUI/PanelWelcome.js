@@ -19,10 +19,6 @@ export class PanelWelcome {
         const welcomeTab = document.querySelector('.tab-button[data-target="welcome"]');
         if (welcomeTab) welcomeTab.style.display = "none";
 
-        // Bascule sur le puzzle
-        uiManagerInstance.tabManager.showTab(ENIGMA_IDS.LSF);
-        uiManagerInstance.tabManager.showTab(ENIGMA_IDS.COLORS);
-
         // Activation visuelle de l'onglet LSF
         const lsfTab = document.querySelector('.tab-button[data-target="lsf"]');
         if (lsfTab) {
@@ -36,8 +32,9 @@ export class PanelWelcome {
             colorsTab.classList.add('active');
         }
 
-        uiManagerInstance.tabManager.tabs[ENIGMA_IDS.LSF].unlockTab(); //we activate here the button to show the tabs
-        uiManagerInstance.tabManager.tabs[ENIGMA_IDS.COLORS].unlockTab();
+
+        uiManagerInstance.tabManager.unlockAndShowBeginningPanels()
+
 
         // Allumage aveuglant du système
         document.body.classList.add("global-boot");

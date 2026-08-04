@@ -104,4 +104,10 @@ export class TabManager {
         }
     }
 
+    unlockAndShowBeginningPanels() {
+        uiManagerInstance.tabManager.tabs[ENIGMA_IDS.LSF].unlockTab(); //we activate here the buttons
+        uiManagerInstance.tabManager.tabs[ENIGMA_IDS.COLORS].unlockTab();
+        uiManagerInstance.tabManager.showTab(ENIGMA_IDS.COLORS);//we make this tab active (open)
+    }
+
 }
