@@ -121,8 +121,8 @@ export class ColorsEnigma extends Enigma {
     commitAction() {
         if (this.framesInWindow === 0) return;
 
-        //if more than 1/4 of the time the circle is not seen it is considered hidden
-        const hiddenColors = COLORS_USED.filter(color => this.hiddenFrames[color] > this.framesInWindow / 4);
+        //if more than 1/2 of the time the circle is not seen it is considered hidden
+        const hiddenColors = COLORS_USED.filter(color => this.hiddenFrames[color] > this.framesInWindow / 2);
 
         if (hiddenColors.length !== 1) {
             this.panel.showNoAction(hiddenColors.length);
