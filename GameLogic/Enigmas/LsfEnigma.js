@@ -35,11 +35,11 @@ export class LsfEnigma extends Enigma {
     checkCondition(playerState) {
         if (this.isResolved) return;
 
-        const gestesActuels = playerState.gestures; // Ex: ["P", "Thumb_Up", "I"]
+        const actualGestures = playerState.gestures;
 
         // if we don't see enough hands to form the word it is not useful to look further
-        const toutesPresentes = gestesActuels.length >= this.lettresRequises.length
-            && this.lettresRequises.every(lettre => gestesActuels.includes(lettre));
+        const toutesPresentes = actualGestures.length >= this.lettresRequises.length
+            && this.lettresRequises.every(lettre => actualGestures.includes(lettre));
 
         if (!toutesPresentes) {
             this.cancelHold();
