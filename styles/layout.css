@@ -2,7 +2,10 @@
     display: flex;
     /* border-bottom: 2px solid #ccc; */
     margin-bottom: 10px;
-    gap: 10px;
+
+    /* pas de gap : les onglets sont collés, c'est l'onglet actif qui crée l'espace en grossissant */
+    /* flex-end : tous les onglets reposent sur la même ligne de base, l'actif grandit vers le haut */
+    align-items: flex-end;
 }
 
 
@@ -13,6 +16,7 @@
 .tab-button {
     /* State 0 : locked, by default invisible */
     display: none;
+    box-sizing: border-box;
     padding: 10px 20px;
     cursor: pointer;
     color: white;
@@ -20,8 +24,10 @@
     border-radius: 8px 8px 0 0;
     font-size: 1rem;
     font-weight: bold;
-    transition: all 0.3s ease;
     margin-top: 5px;
+
+    /* on liste les propriétés au lieu de "all" : le navigateur n'en surveille que 4 au lieu de toutes */
+    transition: padding 0.25s ease, margin 0.25s ease, border-color 0.25s ease, background-color 0.25s ease;
 }
 
 /* ---------------------------------------------------
@@ -64,7 +70,13 @@
     border-color: #ffffff;
     font-weight: 900;
     text-shadow: 0 0 5px rgba(255, 255, 255, 0.5);
-    transform: scale(1.1);
+
+    /* On grossit avec padding + margin, et non avec transform : un transform ne change pas la mise
+       en page, donc l'onglet actif recouvrirait ses voisins au lieu de les écarter.
+       La marge à 0 en haut le fait aussi monter au-dessus de la ligne des autres. */
+    padding: 13px 26px;
+    /* margin: 0 5px; */
+
     position: relative;
     z-index: 10;
 }
