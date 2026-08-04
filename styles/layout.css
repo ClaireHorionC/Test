@@ -46,6 +46,18 @@
 }
 
 /* ---------------------------------------------------
+    For the help tabs : there are never completed, theyre always in blue 
+    (by security we make then blue for available AND completed in case they 
+    become completed somehow) 
+--------------------------------------------------- */
+.tab-button.tab-help.available,
+.tab-button.tab-help.completed {
+    background-color: #3185a3;
+    border-bottom: 3px solid #1d485b;
+}
+
+
+/* ---------------------------------------------------
     Modifier : Active or not
 --------------------------------------------------- */
 .tab-button.active {
