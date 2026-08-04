@@ -1,6 +1,6 @@
 import uiManagerInstance from './UIManager.js';
 
-import { playTabUnlockingSound } from '../Utils/Audio/AudioSynth.js';
+import audioManagerInstance from '../Audio/AudioManager.js';
 
 export class Animations {
 
@@ -20,7 +20,7 @@ export class Animations {
 
         if (this.cinematicOverlay) {
             this.cinematicText.innerText = newTab.name;
-            playTabUnlockingSound();
+            audioManagerInstance.playTabUnlocking();
 
             this.cinematicOverlay.style.display = "flex";
 

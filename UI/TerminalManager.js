@@ -7,7 +7,7 @@ import { ENIGMA_STATUS } from '../../Utils/Constant.js';
 
 
 import { showClueAlert } from './AlertManager.js';
-import { playMysteriousSwell } from '../Utils/Audio/AudioSynth.js';
+import audioManagerInstance from '../Audio/AudioManager.js';
 
 export class TerminalManager {
     constructor() {
@@ -104,7 +104,7 @@ export class TerminalManager {
         this.btnOpen.classList.add('mysterious-reveal');
 
         // 2. Lancement du son généré
-        playMysteriousSwell();
+        audioManagerInstance.playMysteriousSwell();
 
         // 3. Effet de Scramble (Décryptage de caractères)
         const finalString = "💻 TERMINAL";

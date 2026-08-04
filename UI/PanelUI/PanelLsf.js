@@ -1,4 +1,4 @@
-import { RisingHarmony } from '../../Utils/Audio/AudioSynth.js';
+import audioManagerInstance from '../../Audio/AudioManager.js';
 import { LSF_HOLD_MS } from '../../Utils/Constant.js';
 
 export class PanelLsf {
@@ -6,9 +6,6 @@ export class PanelLsf {
     constructor() {
         this.lsfTextBox = document.getElementById("lsf-sign-box");
         this.holdBar = document.getElementById("lsf-hold-bar");
-
-        // le crescendo dure exactement le temps du maintien demandé : il culmine pile à la validation
-        this.risingHarmony = new RisingHarmony(LSF_HOLD_MS / 1000);
     }
 
     /**
@@ -42,9 +39,10 @@ export class PanelLsf {
         if (this.holdBar) this.holdBar.style.width = `${clamped * 100}%`;
 
         if (clamped > 0) {
-            this.risingHarmony.start();
+            // le crescendo dure exactement le temps du maintien demandé : il culmine pile à la validation
+            audioManagerInstance.startCrescendo(LSF_HOLD_MS / 1000);
         } else {
-            this.risingHarmony.stop();
+            audioManagerInstance.stopCrescendo();
         }
     }
 }
