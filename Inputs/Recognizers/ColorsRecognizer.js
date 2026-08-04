@@ -126,7 +126,7 @@ export class ColorsRecognizer {
         if (s < 40 || v < 40) return "Inconnue";
 
         if (h <= 35) {
-            if (v < 170) return "Marron";
+            if (v < 160) return "Marron";
             else return "Orange";
         }
         else if (h > 35 && h <= 80) {
