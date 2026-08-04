@@ -14,7 +14,6 @@ import { TerminalManager } from './TerminalManager.js';
 import { ChatBot } from '../GameLogic/Help/ChatBot.js';
 
 
-
 class UIManager {
 
     constructor() {
@@ -39,7 +38,9 @@ class UIManager {
         }
 
         const waitingTime = this.animations.launchAnimationOutOfWelcomePanel();
-        this.panelManager.panelWelcome.transitionToBeginningTab(waitingTime);
+        await this.panelManager.panelWelcome.transitionToBeginningTab(waitingTime);
+
+        this.terminalManager.showTerminalButton();
     }
 
 

@@ -96,7 +96,6 @@ class GameEngine {
         this.putEnigmaIntoTheActivePool(ENIGMA_IDS.COLORS); //we let the logic of the UI, (so that the buttons of the tabs does not show in the animation)
         this.putEnigmaIntoTheActivePool(ENIGMA_IDS.LSF);    //so we activate the buttons in transitionToBeginningTab()
 
-        uiManagerInstance.terminalManager.showTerminalButton();
 
         requestAnimationFrame(() => this.loop());
     }

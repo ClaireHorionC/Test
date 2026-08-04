@@ -7,46 +7,42 @@ export class PanelWelcome {
 
     }
     /**
- * Bascule sur l'onglet LSF et lance l'éblouissement global de l'écran.
- * @param {number} delay - Le temps à attendre avant de lancer la transition.
- */
+     * Bascule sur l'onglet LSF, lance l'éblouissement global de l'écran, puis attend la fin du flash.
+     * La promesse ne se résout que quand la transition est visuellement terminée, pour que l'appelant
+     * n'ait jamais besoin de deviner combien de temps ça prend.
+     * @param {number} delay - Le temps à attendre avant de lancer la transition.
+     */
     async transitionToBeginningTab(delay) {
-        setTimeout(() => {
-            // Nettoyage de la navigation
-            const welcomeTab = document.querySelector('.tab-button[data-target="welcome"]');
-            if (welcomeTab) welcomeTab.style.display = "none";
+        await wait(delay); // on attend la fin de l'explosion du panneau d'accueil
 
-            // Bascule sur le puzzle
-            uiManagerInstance.tabManager.showTab(ENIGMA_IDS.LSF);
-            uiManagerInstance.tabManager.showTab(ENIGMA_IDS.COLORS);
+        // Nettoyage de la navigation
+        const welcomeTab = document.querySelector('.tab-button[data-target="welcome"]');
+        if (welcomeTab) welcomeTab.style.display = "none";
 
+        // Bascule sur le puzzle
+        uiManagerInstance.tabManager.showTab(ENIGMA_IDS.LSF);
+        uiManagerInstance.tabManager.showTab(ENIGMA_IDS.COLORS);
 
+        // Activation visuelle de l'onglet LSF
+        const lsfTab = document.querySelector('.tab-button[data-target="lsf"]');
+        if (lsfTab) {
+            document.querySelectorAll('.tab-button').forEach(b => b.classList.remove('active'));
+            lsfTab.classList.add('active');
+        }
 
-            // Activation visuelle de l'onglet LSF
-            const lsfTab = document.querySelector('.tab-button[data-target="lsf"]');
-            if (lsfTab) {
-                document.querySelectorAll('.tab-button').forEach(b => b.classList.remove('active'));
-                lsfTab.classList.add('active');
-            }
+        const colorsTab = document.querySelector('.tab-button[data-target="colors"]');
+        if (colorsTab) {
+            document.querySelectorAll('.tab-button').forEach(b => b.classList.remove('active'));
+            colorsTab.classList.add('active');
+        }
 
-            const colorsTab = document.querySelector('.tab-button[data-target="colors"]');
-            if (colorsTab) {
-                document.querySelectorAll('.tab-button').forEach(b => b.classList.remove('active'));
-                colorsTab.classList.add('active');
-            }
-
-            // Allumage aveuglant du système
-            document.body.classList.add("global-boot");
-
-            // Nettoyage final pour ne pas polluer le DOM
-            setTimeout(() => {
-                document.body.classList.remove("global-boot");
-            }, 3500);
-
-        }, delay);
-
-        await wait(1300); //we wait for the transition on the new screen
         uiManagerInstance.tabManager.tabs[ENIGMA_IDS.LSF].unlockTab(); //we activate here the button to show the tabs
         uiManagerInstance.tabManager.tabs[ENIGMA_IDS.COLORS].unlockTab();
+
+        // Allumage aveuglant du système
+        document.body.classList.add("global-boot");
+
+        await wait(3500); //durée du flash
+        document.body.classList.remove("global-boot");
     }
 }
