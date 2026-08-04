@@ -55,7 +55,7 @@ export function whichLetterIsDetected(landmarks) {
     }
 
     // 6. Lettre "N" : Index et majeur tendus et COLLÉS (distance < 0.06)
-    else if (!isIndexFolded && !isMiddleFolded && isRingFolded && isPinkyFolded && getDistance(indexTip, middleTip) < 0.04) {
+    else if (!isIndexFolded && !isMiddleFolded && isRingFolded && isPinkyFolded && getDistance(indexTip, middleTip) < 0.06) {
         return "N";
     }
 
