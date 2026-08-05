@@ -5,72 +5,166 @@ skinparam classBackgroundColor #ffffff
 skinparam classBorderColor #007f8b
 skinparam classArrowColor #007f8b
 
-package "📁 Network (Communication)" {
-  class NetworkManager {
-    + initialiser()
-    + envoyerMessage()
-  }
-}
-
-package "📁 Inputs (Les Contrôles)" {
-  class InputManager {
-    + getEtatActuel()
-    + nettoyerBuffer()
-  }
-  class VisionController {
-    + detecterMains()
-    + detecterFormes()
-  }
-  class KeyboardController {
-    - touchesPressees: Array
-    + getDerniereTouche()
-  }
-}
-
 package "📁 Core (Le Cerveau)" {
   class GameEngine {
-    + demarrerJeu()
-    + bouclePrincipale()
+    + dictionnaryOfEnigmas: Map
+    + activeEnigmas: Enigma[]
+    + loadEnigmas()
+    + start()
+    + loop()
+    + completeEnigma(id, idsSuivants)
   }
-  class InventorySystem {
-    + ajouterObjet()
-  }
-}
 
-package "📁 UI (L'Interface)" {
-  class UIManager {
-    + actualiserEcran()
-  }
-  class TabsController {
-    + changerOnglet()
-  }
-  class Alerts {
-    + addPopUp
-  }
-}
-
-package "📁 Enigmas (Les Niveaux)" {
   abstract class Enigma {
-    + id: Integer
-    + checkCondition(inputs)
+    + id: String
+    + isResolved: Boolean
+    + start()
+    + update()
+    + checkCondition(playerState)
+    + onSuccess()
   }
+  note right of Enigma
+    Chaque énigme concrète possède son propre Panel*
+    (voir UI) et déclenche onSuccess() -> GameEngine
+    la marque résolue et débloque les énigmes suivantes.
+    Toutes écoutent aussi l'évènement "cheatcode_force_resolve"
+    (émis par KeyboardController) pour se résoudre sans capteur.
+  end note
+
   class LsfEnigma
-  class ColorEnigma
-  class TerminalEnigma
+  class ArucoEnigma
+  class ColorsEnigma
+  class GuiltyEnigma
+  class FinalEnigma
+  note bottom of ColorsEnigma
+    Délègue la logique de grille à un modèle
+    Maze indépendant (GameLogic/MiniGames)
+  end note
+  note bottom of FinalEnigma
+    GuiltyEnigma et FinalEnigma n'utilisent pas
+    l'InputManager : réponses tapées au clavier
+  end note
 }
 
-' --- Relations ---
-GameEngine --> NetworkManager : communique via >
-GameEngine --> UIManager : met à jour >
-GameEngine "1" *-- "*" Enigma : évalue >
-GameEngine --> InventorySystem : modifie >
+package "💬 Help" {
+  class ChatBot {
+    + startIfNeeded()
+    + startConversation()
+  }
+  note right of ChatBot
+    N'hérite PAS de Enigma : ouvert directement
+    depuis son Tab, pas géré par le pool actif
+    du GameEngine.
+  end note
+}
 
-' La nouveauté : Le GameEngine ne parle qu'au InputManager
+package "🎥 Inputs (Les Capteurs)" {
+  class InputManager {
+    + update(tabId)
+    + getState()
+  }
+  class VisionController {
+    + update(tabId)
+    + getResults()
+  }
+  class KeyboardController {
+    + cheatCode: String
+  }
+
+  class LsfRecognizer
+  class ArucoRecognizer
+  class ColorsRecognizer
+  note bottom of ColorsRecognizer
+    Un Recognizer par énigme caméra. VisionController
+    choisit lequel appeler selon le tabId actif et
+    fusionne leur résultat dans un seul playerState.
+  end note
+}
+
+package "🖥️ UI (L'Interface)" {
+  class UIManager {
+    + tabManager
+    + panelManager
+    + animations
+  }
+  class TabManager {
+    + tabs: Map<id, Tab>
+    + showTab(id)
+  }
+  class Tab {
+    + status
+    + activateTab()
+    + unlockTab()
+  }
+
+  class PanelManager
+  class PanelWelcome
+  class PanelLsf
+  class PanelColors
+  class PanelChatbot
+  class PanelGuilty
+  class PanelFinal
+  note bottom of PanelManager
+    Un Panel* par écran : uniquement du DOM et de
+    l'affichage, aucune règle de jeu. Chaque énigme /
+    ChatBot possède le sien et l'appelle pour se montrer.
+  end note
+
+  class Animations
+  class TerminalManager
+  class WebcamButton
+  class AlertManager
+}
+
+package "🔊 Audio" {
+  class AudioManager {
+    + getContext()
+    + playTabUnlocking()
+    + playMysteriousSwell()
+    + startCrescendo(duree)
+    + stopCrescendo()
+  }
+  note bottom of AudioManager
+    Possède l'unique AudioContext du jeu. Les sons
+    (dossier Sounds/) sont de simples générateurs qui
+    se branchent dessus plutôt que d'en créer un chacun.
+  end note
+}
+
+' --- Relations principales ---
+GameEngine "1" *-- "*" Enigma : charge et pilote >
 GameEngine --> InputManager : interroge >
-InputManager *-- VisionController : agrège >
-InputManager *-- KeyboardController : agrège >
+GameEngine --> UIManager : pilote (onglets, panels) >
 
 LsfEnigma -up-|> Enigma
-ColorEnigma -up-|> Enigma
-TerminalEnigma -up-|> Enigma
+ArucoEnigma -up-|> Enigma
+ColorsEnigma -up-|> Enigma
+GuiltyEnigma -up-|> Enigma
+FinalEnigma -up-|> Enigma
+
+ChatBot --> GameEngine : signale un coupable trouvé >
+ChatBot --> PanelChatbot : s'affiche via >
+
+InputManager *-- VisionController : agrège >
+InputManager *-- KeyboardController : agrège >
+VisionController ..> LsfRecognizer : selon tabId >
+VisionController ..> ArucoRecognizer : selon tabId >
+VisionController ..> ColorsRecognizer : selon tabId >
+
+UIManager *-- TabManager
+UIManager *-- PanelManager
+UIManager *-- Animations
+UIManager *-- TerminalManager
+UIManager *-- WebcamButton
+TabManager *-- Tab
+PanelManager *-- PanelWelcome
+PanelManager *-- PanelLsf
+PanelManager *-- PanelColors
+PanelManager *-- PanelChatbot
+PanelManager *-- PanelGuilty
+PanelManager *-- PanelFinal
+
+Animations --> AudioManager : joue des sons >
+TerminalManager --> AudioManager : joue des sons >
+PanelLsf --> AudioManager : crescendo de maintien >
 @enduml
