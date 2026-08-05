@@ -6,22 +6,27 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>JEPEIA</title>
 
+    <!-- Global -->
     <link rel="stylesheet" href="styles/base.css">
-    <link rel="stylesheet" href="styles/layout.css">
-    <link rel="stylesheet" href="styles/webcam.css">
-    <link rel="stylesheet" href="styles/cinematics.css">
-    <link rel="stylesheet" href="styles/groovyTitle.css">
-    <link rel="stylesheet" href="styles/unlockingAnimation.css">
-    <link rel="stylesheet" href="styles/errorWindow.css">
-    <link rel="stylesheet" href="styles/terminal.css">
-    <link rel="stylesheet" href="styles/chatbot.css">
-    <link rel="stylesheet" href="styles/guilty.css">
-    <link rel="stylesheet" href="styles/maze.css">
-    <link rel="stylesheet" href="styles/final.css">
-    <link rel="stylesheet" href="styles/lsf.css">
 
+    <!-- Structure de la page -->
+    <link rel="stylesheet" href="styles/layout/tabs.css">
+    <link rel="stylesheet" href="styles/layout/panels.css">
 
+    <!-- Blocs réutilisables -->
+    <link rel="stylesheet" href="styles/components/webcam.css">
+    <link rel="stylesheet" href="styles/components/terminal.css">
+    <link rel="stylesheet" href="styles/components/errorWindow.css">
+    <link rel="stylesheet" href="styles/components/cinematics.css">
+    <link rel="stylesheet" href="styles/components/groovyTitle.css">
 
+    <!-- Un fichier par panneau -->
+    <link rel="stylesheet" href="styles/panels/welcome.css">
+    <link rel="stylesheet" href="styles/panels/lsf.css">
+    <link rel="stylesheet" href="styles/panels/colors.css">
+    <link rel="stylesheet" href="styles/panels/chatbot.css">
+    <link rel="stylesheet" href="styles/panels/guilty.css">
+    <link rel="stylesheet" href="styles/panels/final.css">
 
 </head>
 
@@ -238,8 +243,7 @@
 
     </div>
 
-
-
+    <!-- The most important : we launch the main -->
     <script type="module" src="main.js"></script>
 </body>
 

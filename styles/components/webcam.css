@@ -1,3 +1,5 @@
+/* --- Le retour caméra, partagé par toutes les énigmes qui utilisent la webcam --- */
+
 .videoView {
     position: relative;
     width: 640px;
@@ -27,19 +29,3 @@ canvas {
     pointer-events: none;
 }
 
-#cv_canvas {
-    z-index: 1;
-}
-
-.output-box {
-    margin-top: 15px;
-    padding: 12px;
-    background-color: #007f8b;
-    color: white;
-    font-size: 1.1rem;
-    border-radius: 5px;
-    width: 616px;
-    min-height: 24px;
-    text-align: center;
-    font-weight: bold;
-}

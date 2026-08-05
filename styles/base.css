@@ -1,11 +1,32 @@
+/* ===================================================
+   Styles globaux : ce qui s'applique à toute la page.
+   Tout ce qui appartient à un panneau précis vit dans panels/,
+   tout ce qui est un bloc réutilisable vit dans components/.
+   =================================================== */
+
 body {
     font-family: Roboto, sans-serif;
     margin: 2em;
     color: #3d3d3d;
     background-color: #f4f6f8;
+
+    background-image: url('../Utils/Pictures/background.jpeg');
+
+    /* L'image s'étire ou se compresse pour couvrir tout l'écran sans se déformer */
+    background-size: cover;
+
+    /* L'image reste toujours centrée */
+    background-position: center;
+
+    /* Empêche l'image de se répéter comme une mosaïque si l'écran est trop grand */
+    background-repeat: no-repeat;
+
+    /* L'image reste fixe quand on fait défiler la page vers le bas */
+    background-attachment: fixed;
 }
 
 
+/* --- Typographie --- */
 
 h2 {
     color: #f9f8fa;
@@ -14,6 +35,9 @@ h2 {
 p {
     color: #e0c4fc;
 }
+
+
+/* --- Boutons par défaut (les boutons spécialisés surchargent ces règles) --- */
 
 button {
     cursor: pointer;
@@ -28,72 +52,4 @@ button {
 button:disabled {
     background-color: #ccc;
     cursor: not-allowed;
-}
-
-.controls {
-    margin-bottom: 20px;
-}
-
-#loadingMessage {
-    color: #007f8b;
-    font-weight: bold;
-    margin-left: 15px;
-}
-
-
-/* Le bouton de démarrage géant */
-.big-start-btn {
-    font-size: 1.5rem;
-    padding: 20px 40px;
-    border-radius: 50px;
-    background-color: #007f8b;
-    box-shadow: 0 10px 20px rgba(0, 127, 139, 0.4);
-    transition: transform 0.2s, background-color 0.3s;
-    text-transform: uppercase;
-    letter-spacing: 2px;
-}
-
-/* Effet de survol */
-.big-start-btn:hover:not(:disabled) {
-    transform: scale(1.05);
-    background-color: #0096a6;
-}
-
-/* S'il est prêt, il palpite pour attirer l'attention */
-.big-start-btn:not(:disabled) {
-    animation: pulseStart 2s infinite alternate;
-}
-
-/* S'il est désactivé (chargement), on le grise et on coupe l'animation */
-.big-start-btn:disabled {
-    background-color: #7f8c8d;
-    box-shadow: none;
-    animation: none;
-}
-
-@keyframes pulseStart {
-    0% {
-        box-shadow: 0 0 10px rgba(0, 127, 139, 0.4);
-    }
-
-    100% {
-        box-shadow: 0 0 30px rgba(0, 127, 139, 0.9);
-    }
-}
-
-body {
-    /* for the background picture style */
-    background-image: url('../Utils/Pictures/background.jpeg');
-
-    /* L'image s'étire ou se compresse pour couvrir tout l'écran sans se déformer */
-    background-size: cover;
-
-    /* L'image reste toujours centrée */
-    background-position: center;
-
-    /* Empêche l'image de se répéter comme une mosaïque si l'écran est trop grand */
-    background-repeat: no-repeat;
-
-    /* Optionnel : L'image reste fixe quand tu fais défiler la page vers le bas */
-    background-attachment: fixed;
 }

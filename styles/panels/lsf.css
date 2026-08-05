@@ -1,4 +1,22 @@
-/* --- Énigme LSF : la barre de maintien des lettres --- */
+/* --- Énigme LSF : la boîte des signes détectés et la barre de maintien --- */
+
+/* La boîte qui affiche les signes reconnus. Elle vivait dans webcam.css, mais elle n'a rien
+   à voir avec la caméra : c'est l'affichage propre à cette énigme. */
+.output-box {
+    margin-top: 15px;
+    padding: 12px;
+    background-color: #007f8b;
+    color: white;
+    font-size: 1.1rem;
+    border-radius: 5px;
+    width: 616px;
+    min-height: 24px;
+    text-align: center;
+    font-weight: bold;
+}
+
+
+/* --- La barre de maintien des lettres --- */
 
 .lsf-hold {
     width: min(600px, 95%);

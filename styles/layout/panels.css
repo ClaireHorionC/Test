@@ -1,0 +1,13 @@
+/* ===================================================
+   Mécanique d'affichage des panneaux : un seul est visible à la fois.
+   C'est TabManager.showTab() qui pose et retire la classe "active".
+   Le contenu de chaque panneau est stylé dans panels/.
+   =================================================== */
+
+.view-panel {
+    display: none;
+}
+
+.view-panel.active {
+    display: block;
+}

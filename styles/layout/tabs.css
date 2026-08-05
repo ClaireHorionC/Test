@@ -37,8 +37,6 @@
     display: block;
     background-color: #f57c00;
     border-bottom: 3px solid #e65100;
-    animation: pulseCompleted 2s infinite alternate;
-
 }
 
 
@@ -79,37 +77,4 @@
 
     position: relative;
     z-index: 10;
-}
-
-
-
-.view-panel {
-    display: none;
-}
-
-.view-panel.active {
-    display: block;
-}
-
-/* --- Définition de l'animation pulseCompleted --- */
-@keyframes pulseCompleted {
-    0% {
-        /* Lueur intense au départ, proche du bouton */
-        box-shadow: 0 0 0 0 rgba(0, 127, 139, 0.7);
-    }
-
-    40% {
-        /* Légère croissance pour l'impact */
-    }
-
-    70% {
-        /* Retour à la taille normale */
-        /* Lueur s'étend et devient transparente */
-        box-shadow: 0 0 0 15px rgba(0, 127, 139, 0);
-    }
-
-    100% {
-        /* Fin de l'animation, lueur totalement disparue */
-        box-shadow: 0 0 0 0 rgba(0, 127, 139, 0);
-    }
 }
