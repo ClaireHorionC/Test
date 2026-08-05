@@ -3,6 +3,7 @@ import { ENIGMA_IDS, CURRENT_TEAM } from '../../Utils/Constant.js';
 
 import uiManagerInstance from '../../UI/UIManager.js';
 import gameEngineInstance from '../GameEngine.js';
+import { showConfirmAlert } from '../../UI/AlertManager.js';
 
 const MAX_TRIES = 2;
 const SECONDS_BETWEEN_TRIES = 5;
@@ -71,6 +72,13 @@ export class FinalEnigma extends Enigma {
 
         while (this.triesLeft > 0) {
             const code = await this.panel.waitUserCode();
+
+            // On fait confirmer le code avant de compter la tentative : une erreur de lecture sur
+            // l'adresse IP ne doit pas coûter l'une des deux seules chances de l'équipe.
+            const confirmed = await showConfirmAlert(
+                `Vous êtes sur le point de valider l'adresse IP "${code}". Vérifiez qu'elle correspond bien, vous n'avez le droit qu'à 2 essais.`
+            );
+            if (!confirmed) continue;
 
             this.triesLeft--;
 
