@@ -17,6 +17,7 @@
     <link rel="stylesheet" href="styles/components/webcam.css">
     <link rel="stylesheet" href="styles/components/terminal.css">
     <link rel="stylesheet" href="styles/components/errorWindow.css">
+    <link rel="stylesheet" href="styles/components/confirmModal.css">
     <link rel="stylesheet" href="styles/components/cinematics.css">
     <link rel="stylesheet" href="styles/components/groovyTitle.css">
 
@@ -178,6 +179,7 @@
                 <button id="btnAccuser-guilty" type="button">Accuser</button>
             </div>
             <p id="feedback-guilty" class="feedback-guilty"></p>
+            <p id="cooldown-guilty" class="cooldown-guilty"></p>
         </div>
 
         <div id="panel-guilty-victory" class="view-panel">
@@ -238,6 +240,19 @@
                 <button id="btn-reload-system" class="btn-danger-large">
                     🔄 Redémarrer le système
                 </button>
+            </div>
+        </div>
+
+        <div id="confirm-modal" class="modal-overlay hidden">
+            <div class="modal-content border-neon-teal">
+                <h2 class="alert-title confirm-title">Vérifiez avant de valider</h2>
+
+                <p id="confirm-message" class="alert-message"></p>
+
+                <div class="confirm-actions">
+                    <button id="confirm-cancel-btn" class="btn-secondary">Modifier ma réponse</button>
+                    <button id="confirm-ok-btn" class="btn-confirm">Je confirme</button>
+                </div>
             </div>
         </div>
 
