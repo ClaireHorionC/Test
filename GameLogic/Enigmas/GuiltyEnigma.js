@@ -3,10 +3,18 @@ import { ENIGMA_IDS, SUSPECTS_BY_TEAM, CURRENT_TEAM } from '../../Utils/Constant
 import { normalizeText } from '../../Utils/UtilFunctions.js';
 
 import uiManagerInstance from '../../UI/UIManager.js';
+import { showConfirmAlert } from '../../UI/AlertManager.js';
+
+// Le cooldown s'allonge à chaque erreur, puis reste au dernier palier pour toutes les suivantes.
+const COOLDOWNS_SECONDS = [10, 40, 60, 180];
 
 /**
  * The player types the name of the person he accuses. Finding the right one unlocks the final enigma.
  * The culprit is the first suspect of the team list : a girl, so the chatbot which only kept the boys was biased.
+ *
+ * There is no hard limit on the number of tries (unlike FinalEnigma) : this is not the last gate of the
+ * game, so locking the team out here would strand them before they even reach the finale. Instead, each
+ * wrong guess costs a growing cooldown, which is enough to kill brute-forcing the ten known suspects.
  */
 export class GuiltyEnigma extends Enigma {
 
@@ -15,33 +23,59 @@ export class GuiltyEnigma extends Enigma {
 
         this.equipe = equipe;
         this.culprit = SUSPECTS_BY_TEAM[equipe][0];
+        this.wrongTries = 0;
+        this.hasStarted = false; // the loop must not be launched twice
 
         this.panel = uiManagerInstance.panelManager.panelGuilty;
-        this.panel.defineAccusationAction(() => this.checkCondition());
+    }
+
+    start() {
+        super.start();
+
+        if (this.hasStarted) return;
+        this.hasStarted = true;
+
+        this.runEnigma();
     }
 
     /**
-     * Nothing to do here : unlike the enigmas using the webcam, this one only reacts when the player accuses someone.
-     * We still override it so the GameEngine loop does not log the DEBUG message of the parent class 60 times per second.
+     * Nothing to poll : the enigma waits for the player instead of being driven by the GameEngine loop.
      */
     update() { }
 
-    checkCondition() {
-        if (this.isResolved) return;
+    async runEnigma() {
+        this.panel.setInputEnabled(true);
 
-        const accusation = this.panel.readAccusation();
+        while (!this.isResolved) {
+            const accusation = await this.panel.waitAccusation();
 
-        if (normalizeText(accusation) === "") {
-            this.panel.showEmptyAccusation();
-            return;
-        }
+            if (normalizeText(accusation) === "") {
+                this.panel.showEmptyAccusation();
+                continue;
+            }
 
-        if (normalizeText(accusation) === normalizeText(this.culprit)) {
-            this.panel.showRightAccusation(this.culprit);
-            this.onSuccess();
-        } else {
+            // On fait confirmer l'orthographe avant de compter le coup : une faute de frappe
+            // ne doit pas coûter un cooldown de plusieurs minutes.
+            const confirmed = await showConfirmAlert(
+                `Tu es sur le point d'accuser "${accusation}". Vérifie l'orthographe avant de valider.`
+            );
+            if (!confirmed) continue;
+
+            if (normalizeText(accusation) === normalizeText(this.culprit)) {
+                this.panel.showRightAccusation(this.culprit);
+                this.panel.setInputEnabled(false);
+                this.onSuccess();
+                return;
+            }
+
             this.panel.showWrongAccusation(accusation);
-            this.panel.clearInput();
+
+            const cooldown = COOLDOWNS_SECONDS[Math.min(this.wrongTries, COOLDOWNS_SECONDS.length - 1)];
+            this.wrongTries++;
+
+            this.panel.setInputEnabled(false);
+            await this.panel.runCooldown(cooldown);
+            this.panel.setInputEnabled(true);
         }
     }
 }

@@ -19,25 +19,47 @@ export function showError(messageInfo) {
 }
 
 
-/*export function hideError() {
-    const modal = document.getElementById('hardware-error-modal');
-    if (modal && !modal.classList.contains('hidden')) {
-        modal.classList.add('hidden');
-    }
+export function showVictoryScreen() {
+    uiManagerInstance.tabManager.showTab('victoire');
 }
 
 
-export function showNotification(message) {
-    uiManagerInstance.notificationBanner.innerText = message;
-    uiManagerInstance.notificationBanner.style.display = "block";
+/**
+ * Demande au joueur de confirmer une réponse tapée à la main avant de la valider pour de bon.
+ * Sert de garde-fou contre les fautes de frappe qui déclencheraient une pénalité pour rien
+ * (le cooldown de L'accusation, une tentative perdue sur l'énigme finale...).
+ * @param {string} message - récapitule ce que le joueur s'apprête à valider
+ * @returns {Promise<boolean>} true si le joueur confirme, false s'il préfère modifier sa réponse
+ */
+export function showConfirmAlert(message) {
+    return new Promise(resolve => {
+        const modal = document.getElementById('confirm-modal');
+        const messageBox = document.getElementById('confirm-message');
+        const confirmBtn = document.getElementById('confirm-ok-btn');
+        const cancelBtn = document.getElementById('confirm-cancel-btn');
 
-    setTimeout(() => {
-        this.notificationBanner.style.display = "none";
-    }, 3000);
-}*/
+        if (!modal || !messageBox || !confirmBtn || !cancelBtn) {
+            console.log("DEBUG showConfirmAlert : la modale de confirmation est introuvable, on valide directement");
+            resolve(true);
+            return;
+        }
 
-export function showVictoryScreen() {
-    uiManagerInstance.tabManager.showTab('victoire');
+        messageBox.textContent = message;
+        modal.classList.remove('hidden');
+
+        const close = (result) => {
+            modal.classList.add('hidden');
+            confirmBtn.removeEventListener('click', onConfirm);
+            cancelBtn.removeEventListener('click', onCancel);
+            resolve(result);
+        };
+
+        const onConfirm = () => close(true);
+        const onCancel = () => close(false);
+
+        confirmBtn.addEventListener('click', onConfirm);
+        cancelBtn.addEventListener('click', onCancel);
+    });
 }
 
 

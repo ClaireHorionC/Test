@@ -60,3 +60,12 @@
 .feedback-guilty.right {
     color: #69f0ae;
 }
+
+/* --- Cooldown affiché après une accusation erronée --- */
+
+.cooldown-guilty {
+    margin-top: 8px;
+    font-weight: bold;
+    min-height: 1.4em;
+    color: #ff8a80;
+}
