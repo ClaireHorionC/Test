@@ -12,10 +12,10 @@ const TICK_MS = 3000;
  * The players have to discover by themselves that hiding one circle moves the character in the given direction.
  */
 const COLOR_TO_DIRECTION = {
-    "Rouge": DIRECTIONS.UP,
-    "Bleu": DIRECTIONS.DOWN,
-    "Jaune": DIRECTIONS.LEFT,
-    "Vert": DIRECTIONS.RIGHT
+    "Red": DIRECTIONS.UP,
+    "Blue": DIRECTIONS.DOWN,
+    "Yellow": DIRECTIONS.LEFT,
+    "Green": DIRECTIONS.RIGHT
 };
 
 const COLORS_USED = Object.keys(COLOR_TO_DIRECTION);
