@@ -9,15 +9,13 @@ import uiManagerInstance from '../../UI/UIManager.js';
 const TICK_MS = 3000;
 
 /**
- * The mapping the players have to discover by themselves : hiding ONE circle moves the character.
- * Nothing in the interface reveals it, they can only learn it by trying and watching the result.
- * Permuting these four values is all it takes to give the second character different controls.
+ * The players have to discover by themselves that hiding one circle moves the character in the given direction.
  */
 const COLOR_TO_DIRECTION = {
-    "Marron": DIRECTIONS.UP,
-    "Bleu-Vert": DIRECTIONS.DOWN,
-    "Orange": DIRECTIONS.LEFT,
-    "Rose foncé": DIRECTIONS.RIGHT
+    "Rouge": DIRECTIONS.UP,
+    "Bleu": DIRECTIONS.DOWN,
+    "Jaune": DIRECTIONS.LEFT,
+    "Vert": DIRECTIONS.RIGHT
 };
 
 const COLORS_USED = Object.keys(COLOR_TO_DIRECTION);

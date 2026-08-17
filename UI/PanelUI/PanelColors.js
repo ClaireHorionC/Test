@@ -4,12 +4,11 @@ const CELL_SIZE = 52; // px, pushed to the CSS variable --maze-cell so both side
 
 // Only used to draw the dot of each chip, so the players can link a chip to a real circle on the table
 const COLOR_SWATCHES = {
-    "Marron": "#8d6e63",
-    "Bleu-Vert": "#00acc1",
-    "Orange": "#fb8c00",
-    "Rose foncé": "#e91e63",
-    "Bleu": "#3f51b5",
-    "Vert": "#4caf50"
+    "Rouge": "#e00000",
+    "Jaune": "#f2d200",
+    "Vert": "#00a63f",
+    "Bleu": "#0057d8",
+    "Magenta": "#d6009a"
 };
 
 export class PanelColors {
