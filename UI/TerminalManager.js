@@ -50,7 +50,7 @@ export class TerminalManager {
         const codeText = this.inputField.value.trim().toLowerCase();
 
         switch (codeText) {
-            case 'open_chatbot':
+            case 'prompt':
                 this.feedbackText.innerText = "Accès autorisé : Chatbot déverrouillé.";
                 this.feedbackText.style.color = "green";
                 uiManagerInstance.unlockNewTabWithAnimations(HELP_IDS.CHATBOT);
