@@ -19,6 +19,7 @@
     <link rel="stylesheet" href="styles/components/errorWindow.css">
     <link rel="stylesheet" href="styles/components/confirmModal.css">
     <link rel="stylesheet" href="styles/components/cinematics.css">
+    <link rel="stylesheet" href="styles/components/successFlash.css">
     <link rel="stylesheet" href="styles/components/groovyTitle.css">
 
     <!-- Un fichier par panneau -->
@@ -216,6 +217,14 @@
     </main>
 
     <div id="overlays-container">
+
+        <!-- jouée à chaque énigme résolue, même quand elle ne débloque rien -->
+        <div id="success-flash" class="success-flash">
+            <div class="success-flash-content">
+                <div class="success-check">✓</div>
+                <div class="success-title">ÉNIGME RÉUSSIE</div>
+            </div>
+        </div>
 
         <div id="unlock-cinematic" class="unlock-cinematic">
             <div class="cinematic-content">

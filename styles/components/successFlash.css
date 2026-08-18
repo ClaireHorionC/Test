@@ -1,0 +1,65 @@
+/* ==========================================================
+    SUCESS OF AN ENIGMA
+   ========================================================== */
+
+.success-flash {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: 9998;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    background: radial-gradient(circle, rgba(76, 175, 80, 0.25), rgba(5, 5, 10, 0.75));
+
+    /* caché tant que l'animation n'est pas lancée */
+    opacity: 0;
+    pointer-events: none;
+    visibility: hidden;
+    transition: opacity 0.25s ease, visibility 0.25s ease;
+}
+
+.success-flash.playing {
+    opacity: 1;
+    visibility: visible;
+}
+
+.success-flash-content {
+    text-align: center;
+    color: #69f0ae;
+}
+
+.success-check {
+    font-size: 6rem;
+    line-height: 1;
+    text-shadow: 0 0 30px rgba(105, 240, 174, 0.9);
+}
+
+.success-flash.playing .success-check {
+    animation: successStamp 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.6);
+}
+
+.success-title {
+    margin-top: 10px;
+    font-size: 2rem;
+    font-weight: bold;
+    letter-spacing: 6px;
+    text-shadow: 0 0 20px rgba(105, 240, 174, 0.6);
+}
+
+/* Le tampon arrive vite et dépasse légèrement, pour l'impact */
+@keyframes successStamp {
+    0% {
+        transform: scale(2.4);
+        opacity: 0;
+    }
+
+    100% {
+        transform: scale(1);
+        opacity: 1;
+    }
+}

@@ -9,6 +9,7 @@ import { FinalEnigma } from './Enigmas/FinalEnigma.js';
 import { ENIGMA_STATUS } from '../Utils/Constant.js';
 import { ENIGMA_IDS } from '../Utils/Constant.js';
 import { HELP_IDS } from '../Utils/Constant.js';
+import { IRL_REWARDS } from '../Utils/Constant.js';
 
 
 import { showError } from '../UI/AlertManager.js';
@@ -184,17 +185,34 @@ class GameEngine {
 
         this.activeEnigmas = this.activeEnigmas.filter(enigme => enigme.id !== idEnigma);
 
+        //Les animations qui suivent partagent une file d'attente : elles se jouent l'une après
+        //l'autre, dans l'ordre où on les demande ici, sans bloquer la suite de cette fonction.
+        uiManagerInstance.animations.launchSuccessAnimation(); //toujours, que l'énigme débloque quelque chose ou non
+
         enigmasToUnlock.forEach(nextId => {
             this.activateEnigmaWithAnimation(nextId);
         });
 
+        this.grantPhysicalRewardOf(idEnigma);
+
         this.cleanMemory(this.dictionnaryOfEnigmas[idEnigma]);
 
-        this.tryUnlockGuiltyEnigma(); //an enigma has just been resolved, maybe it was the LSF one
+        this.tryUnlockGuiltyEnigma(); //an enigma has just been resolved, maybe it was the LSF one that need to be done to unlock GuiltyEnigma
 
         this.checkFinalVictory();
 
         this.isTransitioning = false;
+    }
+
+    /**
+     * Signale l'objet physique gagné, s'il y en a un. Passe par la file des animations pour que
+     * la liste s'ouvre après les cinématiques, et non par-dessus.
+     */
+    grantPhysicalRewardOf(idEnigma) {
+        const reward = IRL_REWARDS[idEnigma];
+        if (!reward) return;
+
+        uiManagerInstance.animations.enqueue(() => uiManagerInstance.inventoryManager.grantReward(reward));
     }
 
     /**

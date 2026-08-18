@@ -1,6 +1,10 @@
 import uiManagerInstance from './UIManager.js';
 
 import audioManagerInstance from '../Audio/AudioManager.js';
+import { wait } from '../Utils/UtilFunctions.js';
+
+const SUCCESS_ANIMATION_MS = 1400;
+const UNLOCK_ANIMATION_MS = 5000; //needs to be the same in css cinematics.css
 
 export class Animations {
 
@@ -9,40 +13,69 @@ export class Animations {
         this.cinematicText = document.getElementById("cinematic-tab-name");
         this.cinematicContent = this.cinematicOverlay?.querySelector(".cinematic-content");
 
+        this.successOverlay = document.getElementById("success-flash");
+
         this.btnWebcam = document.getElementById("webcamButton");
+
+        //we use queue so that animations does not overlap on each other
+        this.queue = Promise.resolve();
+    }
+
+    /**
+     * Queue of animation
+     * @param {() => Promise} animation
+     */
+    enqueue(animation) {
+        this.queue = this.queue
+            .then(animation)
+            .catch(error => console.log("DEBUG Animations : une animation a échoué", error));
+
+        return this.queue;
+    }
+
+    /**
+     * Played after each enigma resolved
+     */
+    launchSuccessAnimation() {
+        return this.enqueue(async () => {
+            if (!this.successOverlay) return;
+
+            this.successOverlay.classList.add("playing");
+            await wait(SUCCESS_ANIMATION_MS);
+            this.successOverlay.classList.remove("playing");
+        });
     }
 
     /**
     * Makes a fancy animation adn then show the button to access the tab of the enigma unlocked
     */
     launchUnlockingEnigmaAnimation(idOfNewTab) {
-        const newTab = uiManagerInstance.tabManager.tabs[idOfNewTab];
+        return this.enqueue(async () => {
+            const newTab = uiManagerInstance.tabManager.tabs[idOfNewTab];
+            if (!this.cinematicOverlay || !newTab) return;
 
-        if (this.cinematicOverlay) {
             this.cinematicText.innerText = newTab.name;
             audioManagerInstance.playTabUnlocking();
 
             this.cinematicOverlay.style.display = "flex";
+            await wait(10);
 
-            setTimeout(() => {
-                this.cinematicOverlay.style.opacity = "1";
-                this.cinematicContent.classList.add("cinematic-animate");
-            }, 10);
+            this.cinematicOverlay.style.opacity = "1";
+            this.cinematicContent.classList.add("cinematic-animate");
+            await wait(UNLOCK_ANIMATION_MS);
 
-            setTimeout(() => {
-                this.cinematicOverlay.style.opacity = "0";
+            this.cinematicOverlay.style.opacity = "0";
+            await wait(300);
 
-                setTimeout(() => {
-                    this.cinematicOverlay.style.display = "none";
-                    this.cinematicContent.classList.remove("cinematic-animate");
+            this.cinematicOverlay.style.display = "none";
+            this.cinematicContent.classList.remove("cinematic-animate");
 
-                    if (newTab.bouton) {
-                        newTab.bouton.classList.add("unlock-animation");
-                        setTimeout(() => newTab.bouton.classList.remove("unlock-animation"), 1500);
-                    }
-                }, 300);
-            }, 5000);
-        }
+            //une fois la cinématique finie, c'est le bouton du nouvel onglet qui doit attirer l'oeil
+            if (newTab.button) {
+                newTab.button.classList.add("unlock-animation");
+                setTimeout(() => newTab.button.classList.remove("unlock-animation"), 1500);
+            }
+        });
     }
 
     /**

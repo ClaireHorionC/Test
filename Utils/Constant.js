@@ -16,6 +16,19 @@ export const HELP_IDS = {
     CHATBOT: 'chatbot'
 };
 
+/**
+ * Physical object the team unlock after completing a certain enigma (on the website (V) or an enigma only present physically (R))
+ * So V_... means it the items are unlocked after resolving an enigma on the website, R_... means it is obtain after resolving an enigma IRL. 
+ * When they do resolve an enigma IRL, they sometimes do have a code to put in TerminalManager which can unlock differents things, an enigma, a
+ * location to physical objects or both.
+ */
+export const IRL_REWARDS = {
+    R_AFTER_VF: "Enveloppe n°1",
+    V_AFTER_COLORS: "Enveloppe n°2",
+    V_AFTER_ARUCO: "Enveloppe n°3",
+    R_AFTER_MOVIES: "Enveloppe n°4"
+};
+
 // Combien de temps les bonnes lettres doivent rester détectées pour valider l'énigme LSF.
 // Partagé entre l'énigme (la règle) et le panneau (la barre et la durée du crescendo), pour qu'ils ne se désynchronisent pas.
 export const LSF_HOLD_MS = 2000;
