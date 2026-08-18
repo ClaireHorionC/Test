@@ -188,7 +188,6 @@ export class ColorsRecognizer {
         if (h >= 20 && h <= 40) return "Jaune";
         if (h >= 48 && h <= 78) return "Vert";
         if (h >= 105 && h <= 133) return "Bleu";
-        if (h >= 143 && h <= 163) return "Magenta";
 
         //We have kinda restrictive teints because we rather want an unknown vote than a false positive of color
         return "Unknown";

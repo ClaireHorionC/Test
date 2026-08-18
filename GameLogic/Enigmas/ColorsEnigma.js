@@ -19,7 +19,7 @@ const COLOR_TO_DIRECTION = {
 };
 
 const COLOR_TO_CHANGE_PLAYER = {
-    "Magenta": ACTIONS.CHANGE_PLAYER
+    "Noir": ACTIONS.CHANGE_PLAYER
 }
 
 const COLORS_USED = [...Object.keys(COLOR_TO_DIRECTION), ...Object.keys(COLOR_TO_CHANGE_PLAYER)];
