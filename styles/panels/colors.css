@@ -162,6 +162,8 @@
     height: 14px;
     border-radius: 50%;
     flex-shrink: 0;
+    /* sans ce contour, la pastille noire serait invisible sur le fond sombre de la chip */
+    border: 1px solid rgba(255, 255, 255, 0.45);
 }
 
 /* --- Le retour après chaque action --- */

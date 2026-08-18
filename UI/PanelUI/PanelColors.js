@@ -8,7 +8,7 @@ const COLOR_SWATCHES = {
     "Jaune": "#f2d200",
     "Vert": "#00a63f",
     "Bleu": "#0057d8",
-    "Magenta": "#d6009a"
+    "Noir": "#000000"
 };
 
 export class PanelColors {
