@@ -1,5 +1,5 @@
 import { Enigma } from './Enigma.js';
-import { Maze, DIRECTIONS } from '../MiniGames/Maze.js';
+import { Maze, DIRECTIONS, ACTIONS } from '../MiniGames/Maze.js';
 import { ENIGMA_IDS } from '../../Utils/Constant.js';
 
 import inputManagerInstance from '../../Inputs/InputManager.js';
@@ -12,13 +12,17 @@ const TICK_MS = 3000;
  * The players have to discover by themselves that hiding one circle moves the character in the given direction.
  */
 const COLOR_TO_DIRECTION = {
-    "Red": DIRECTIONS.UP,
-    "Blue": DIRECTIONS.DOWN,
-    "Yellow": DIRECTIONS.LEFT,
-    "Green": DIRECTIONS.RIGHT
+    "Rouge": DIRECTIONS.UP,
+    "Bleu": DIRECTIONS.DOWN,
+    "Jaune": DIRECTIONS.LEFT,
+    "Vert": DIRECTIONS.RIGHT
 };
 
-const COLORS_USED = Object.keys(COLOR_TO_DIRECTION);
+const COLOR_TO_CHANGE_PLAYER = {
+    "Magenta": ACTIONS.CHANGE_PLAYER
+}
+
+const COLORS_USED = [...Object.keys(COLOR_TO_DIRECTION), ...Object.keys(COLOR_TO_CHANGE_PLAYER)];
 
 /**
  * '#' wall, '.' floor, 'S' start, 'E' exit.
@@ -127,7 +131,16 @@ export class ColorsEnigma extends Enigma {
             return;
         }
 
-        const result = this.maze.tryMove(COLOR_TO_DIRECTION[hiddenColors[0]]);
+        const color = hiddenColors[0]
+        let result;
+
+        if (COLOR_TO_CHANGE_PLAYER[color] === ACTIONS.CHANGE_PLAYER) { //with the color we either change the player
+            ///TODO : change player
+            return;
+        } else {
+            result = this.maze.tryMove(COLOR_TO_DIRECTION[hiddenColors[0]]); //or move in a direction
+        }
+
 
         if (!result.moved) {
             this.panel.showBlocked();

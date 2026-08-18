@@ -178,10 +178,10 @@ export class ColorsRecognizer {
     analyseColorHSV(h, s, v) {
         if (s < MINIMUM_SATURATION || v < MINIMUM_LUMINOSITY) return "Unknown";
 
-        if (h >= 170 || h <= 10) return "Red"; //red is between 170 and 10 because H is looping if the value is over 179
-        if (h >= 20 && h <= 40) return "Yellow";
-        if (h >= 48 && h <= 78) return "Green";
-        if (h >= 105 && h <= 133) return "Blue";
+        if (h >= 170 || h <= 10) return "Rouge"; //red is between 170 and 10 because H is looping if the value is over 179
+        if (h >= 20 && h <= 40) return "Jaune";
+        if (h >= 48 && h <= 78) return "Vert";
+        if (h >= 105 && h <= 133) return "Bleu";
         if (h >= 143 && h <= 163) return "Magenta";
 
         //We have kinda restrictive teints because we rather want an unknown vote than a false positive of color

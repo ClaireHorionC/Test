@@ -5,6 +5,10 @@ export const DIRECTIONS = {
     RIGHT: 'right'
 };
 
+export const ACTIONS = {
+    CHANGE_PLAYER: 'change_player'
+}
+
 export const MAZE_SYMBOLS = {
     WALL: '#',
     FLOOR: '.',
