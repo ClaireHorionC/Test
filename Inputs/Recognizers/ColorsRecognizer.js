@@ -138,7 +138,7 @@ export class ColorsRecognizer {
 
         const votes = {};
         let mainColor = "Unknown";
-        let meilleurScore = 0;
+        let bestScore = 0;
         let validVotes = 0;
 
         for (let dy = -radiusOfSample; dy <= radiusOfSample; dy += SAMPLE_STEP) {
