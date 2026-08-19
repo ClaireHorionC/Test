@@ -25,6 +25,42 @@ export function showVictoryScreen() {
 
 
 /**
+ * Annonce un objet physique à aller récupérer.
+ *
+ * Volontairement bloquante et fermée à la main : contrairement à une énigme débloquée, dont le
+ * bouton d'onglet reste visible, un objet à récupérer ne laisse aucune trace à l'écran. Une simple
+ * animation qui passe suffirait à bloquer l'équipe sans qu'elle comprenne pourquoi.
+ *
+ * @param {string} reward - ce que l'équipe vient de gagner
+ * @returns {Promise<void>} résolue une fois que le joueur a cliqué
+ */
+export function showRewardAlert(reward) {
+    return new Promise(resolve => {
+        const modal = document.getElementById('reward-modal');
+        const messageBox = document.getElementById('reward-message');
+        const okBtn = document.getElementById('reward-ok-btn');
+
+        if (!modal || !messageBox || !okBtn) {
+            console.log("DEBUG showRewardAlert : la modale des objets est introuvable");
+            resolve();
+            return;
+        }
+
+        messageBox.textContent = reward;
+        modal.classList.remove('hidden');
+
+        const close = () => {
+            modal.classList.add('hidden');
+            okBtn.removeEventListener('click', close);
+            resolve();
+        };
+
+        okBtn.addEventListener('click', close);
+    });
+}
+
+
+/**
  * Demande au joueur de confirmer une réponse tapée à la main avant de la valider pour de bon.
  * Sert de garde-fou contre les fautes de frappe qui déclencheraient une pénalité pour rien
  * (le cooldown de L'accusation, une tentative perdue sur l'énigme finale...).

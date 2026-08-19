@@ -9,11 +9,11 @@ import { FinalEnigma } from './Enigmas/FinalEnigma.js';
 import { ENIGMA_STATUS } from '../Utils/Constant.js';
 import { ENIGMA_IDS } from '../Utils/Constant.js';
 import { HELP_IDS } from '../Utils/Constant.js';
-import { IRL_REWARDS } from '../Utils/Constant.js';
 
 
 import { showError } from '../UI/AlertManager.js';
 import { showVictoryScreen } from '../UI/AlertManager.js';
+import { showRewardAlert } from '../UI/AlertManager.js';
 
 import { initOpenCV } from '../Utils/Libraries/LoadOpenCV.js';
 
@@ -206,13 +206,14 @@ class GameEngine {
 
     /**
      * Signale l'objet physique gagné, s'il y en a un. Passe par la file des animations pour que
-     * la liste s'ouvre après les cinématiques, et non par-dessus.
+     * l'alerte s'affiche APRÈS les cinématiques, et non par-dessus. Comme showRewardAlert ne se
+     * résout qu'au clic du joueur, la file attend naturellement qu'il ait fermé l'alerte.
      */
     grantPhysicalRewardOf(idEnigma) {
-        const reward = IRL_REWARDS[idEnigma];
+        const reward = this.dictionnaryOfEnigmas[idEnigma]?.irlReward;
         if (!reward) return;
 
-        uiManagerInstance.animations.enqueue(() => uiManagerInstance.inventoryManager.grantReward(reward));
+        uiManagerInstance.animations.enqueue(() => showRewardAlert(reward));
     }
 
     /**
