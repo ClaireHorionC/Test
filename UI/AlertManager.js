@@ -25,14 +25,10 @@ export function showVictoryScreen() {
 
 
 /**
- * Annonce un objet physique à aller récupérer.
+ * Announce to the team that they unlocked a new object in a new location
  *
- * Volontairement bloquante et fermée à la main : contrairement à une énigme débloquée, dont le
- * bouton d'onglet reste visible, un objet à récupérer ne laisse aucune trace à l'écran. Une simple
- * animation qui passe suffirait à bloquer l'équipe sans qu'elle comprenne pourquoi.
- *
- * @param {string} reward - ce que l'équipe vient de gagner
- * @returns {Promise<void>} résolue une fois que le joueur a cliqué
+ * @param {string} reward - the location of the object they got
+ * @returns {Promise<void>} resolved when clicked on it
  */
 export function showRewardAlert(reward) {
     return new Promise(resolve => {
