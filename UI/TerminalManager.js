@@ -1,13 +1,27 @@
 import gameEngineInstance from '../GameLogic/GameEngine.js';
 import uiManagerInstance from './UIManager.js';
-import { ENIGMA_IDS } from '../Utils/Constant.js';
-import { HELP_IDS } from '../Utils/Constant.js';
-import { ENIGMA_STATUS } from '../Utils/Constant.js';
+import { ENIGMA_IDS, HELP_IDS, ENIGMA_STATUS, IRL_REWARDS } from '../Utils/Constant.js';
 
-
-
-import { showClueAlert } from './AlertManager.js';
+import { showRewardAlert } from './AlertManager.js';
 import audioManagerInstance from '../Audio/AudioManager.js';
+
+/**
+ *those codes are found in the irl enigmas of the game
+ * 
+ * A code can unlock a tab, give a location IRL or both
+ */
+const TERMINAL_CODES = {
+    apprentissage: {
+        feedback: "Accès autorisé : Scanner de couleurs déverrouillé.",
+        tabToUnlock: ENIGMA_IDS.COLORS,
+        reward: IRL_REWARDS.R_AFTER_VF,
+    },
+    prompt: {
+        feedback: "Accès autorisé : Chatbot déverrouillé.",
+        tabToUnlock: HELP_IDS.CHATBOT,
+        reward: IRL_REWARDS.R_AFTER_MOVIES,
+    }
+};
 
 export class TerminalManager {
     constructor() {
@@ -48,45 +62,51 @@ export class TerminalManager {
 
     processCode() {
         const codeText = this.inputField.value.trim().toLowerCase();
+        const code = TERMINAL_CODES[codeText];
 
-        switch (codeText) {
-            case 'prompt':
-                this.feedbackText.innerText = "Accès autorisé : Chatbot déverrouillé.";
-                this.feedbackText.style.color = "green";
-                uiManagerInstance.unlockNewTabWithAnimations(HELP_IDS.CHATBOT);
-                setTimeout(() => this.closeTerminal(), 1500);
-                break;
-            case 'apprentissage':
-                if (uiManagerInstance.tabManager.tabs[ENIGMA_IDS.COLORS].status === ENIGMA_STATUS.LOCKED) {
-                    this.feedbackText.innerText = "Accès autorisé : Colors déverrouillé.";
-                    this.feedbackText.style.color = "green";
-                    gameEngineInstance.activateEnigmaWithAnimation(ENIGMA_IDS.COLORS);
-                    setTimeout(() => this.closeTerminal(), 1500);
-                } else {
-                    this.feedbackText.innerText = "Enigme déjà débloquée";
-                    this.feedbackText.style.color = "orange";
-                }
-
-                break;
-            /*case 'physique': // Le mot de passe choisi par le joueur
-                this.feedbackText.innerText = "Code accepté. Déverrouillage en cours...";
-                this.feedbackText.style.color = "green";
-
-                // 1. On ferme le terminal après un court délai pour l'effet visuel
-                setTimeout(() => this.closeTerminal(), 800);
-
-                // 2. On affiche le pop-up d'indice une fois le terminal disparu
-                setTimeout(() => {
-                    showClueAlert("Bravo, tu as débloqué un nouvel indice physique !");
-                }, 1200);
-                break;*/
-            default:
-                this.feedbackText.innerText = "Code invalide. Accès refusé.";
-                this.feedbackText.style.color = "red";
-                this.inputField.value = '';
-                break;
+        if (!code) {
+            this.feedbackText.innerText = "Code invalide. Accès refusé.";
+            this.feedbackText.style.color = "red";
+            this.inputField.value = '';
+            return;
         }
 
+        let tab;
+        if (code.tabToUnlock) {
+            tab = code.tabToUnlock;
+            uiManagerInstance.tabManager.tabs[code.tabToUnlock]
+        } else {
+            console.log("DEBUG : code tab not found");
+        }
+
+        const alreadyUsed = tab ? tab.status !== ENIGMA_STATUS.LOCKED : false;
+
+        if (alreadyUsed) {
+            //On réaffiche quand même la récompense : le code est le seul endroit où l'équipe peut
+            //retrouver son lieu si elle a fermé l'alerte sans le retenir.
+            this.feedbackText.innerText = "Code déjà utilisé, voici un rappel.";
+            this.feedbackText.style.color = "orange";
+        } else {
+            this.feedbackText.innerText = code.feedback;
+            this.feedbackText.style.color = "green";
+
+            if (code.tabToUnlock) gameEngineInstance.activateEnigmaWithAnimation(code.tabToUnlock);
+        }
+
+        setTimeout(() => this.closeTerminal(), 1500);
+        this.announceReward(code);
+    }
+
+    /**
+     * Annonce l'objet à récupérer et son lieu. Passe par la file des animations pour s'afficher
+     * APRÈS l'éventuelle cinématique de déverrouillage, et non par-dessus.
+     */
+    announceReward(code) {
+        if (!code.reward) return;
+
+        const message = `${code.reward}`;
+
+        uiManagerInstance.animations.enqueue(() => showRewardAlert(message));
     }
 
     /**
