@@ -23,10 +23,10 @@ export const HELP_IDS = {
  * location to physical objects or both.
  */
 export const IRL_REWARDS = {
-    R_AFTER_VF: "Enveloppe n°1",
-    V_AFTER_COLORS: "Enveloppe n°2",
-    V_AFTER_ARUCO: "Enveloppe n°3",
-    R_AFTER_MOVIES: "Enveloppe n°4"
+    R_AFTER_VF: "BUREAU",
+    V_AFTER_COLORS: "TABLEAU",
+    V_AFTER_ARUCO: "PORTE",
+    R_AFTER_MOVIES: "COULOIR"
 };
 
 // Combien de temps les bonnes lettres doivent rester détectées pour valider l'énigme LSF.
