@@ -23,7 +23,7 @@ export const HELP_IDS = {
  * location to physical objects or both.
  */
 export const IRL_REWARDS = {
-    R_AFTER_VF: "BUREAU",
+    R_AFTER_DATE: "BUREAU",
     V_AFTER_COLORS: "TABLEAU",
     V_AFTER_ARUCO: "PORTE",
     R_AFTER_MOVIES: "COULOIR"
