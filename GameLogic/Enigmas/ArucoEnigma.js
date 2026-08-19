@@ -1,11 +1,11 @@
 import { Enigma } from './Enigma.js';
-import { ENIGMA_IDS } from '../../Utils/Constant.js';
+import { ENIGMA_IDS, IRL_REWARDS } from '../../Utils/Constant.js';
 import inputManagerInstance from '../../Inputs/InputManager.js';
 import uiManagerInstance from '../../UI/UIManager.js';
 
 export class ArucoEnigma extends Enigma {
     constructor() {
-        super(ENIGMA_IDS.ARUCO, "Aruco vrai/faux");
+        super(ENIGMA_IDS.ARUCO, "Aruco vrai/faux", [ENIGMA_IDS.LSF], IRL_REWARDS.V_AFTER_ARUCO);
 
         // Configuration métier du jeu
         this.positionTolerance = 10;
