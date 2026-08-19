@@ -8,12 +8,14 @@ export class Enigma {
      * @param {string} name - Le nom d'affichage
      * @param {boolean} isResolved - SI l'énigme a été résolue ou pas
      * @param {Array<string>} enigmesSuivantes - Liste des IDs à débloquer en cas de réussite
+     * @param {string|null} irlReward - Objet physique remis à l'équipe (voir IRL_REWARDS), null si aucun
      */
-    constructor(id, name, enigmesSuivantes = []) {
+    constructor(id, name, enigmesSuivantes = [], irlReward = null) {
         this.id = id;
         this.name = name;
         this.isResolved = false;
         this.enigmesSuivantes = enigmesSuivantes;
+        this.irlReward = irlReward;
 
         this.addEventListenerForceResolution();
     }

@@ -1,6 +1,6 @@
 import { Enigma } from './Enigma.js';
 import { Maze, DIRECTIONS, ACTIONS } from '../MiniGames/Maze.js';
-import { ENIGMA_IDS } from '../../Utils/Constant.js';
+import { ENIGMA_IDS, IRL_REWARDS } from '../../Utils/Constant.js';
 
 import inputManagerInstance from '../../Inputs/InputManager.js';
 import uiManagerInstance from '../../UI/UIManager.js';
@@ -42,7 +42,7 @@ const MAZE_LAYOUT = [
 export class ColorsEnigma extends Enigma {
 
     constructor() {
-        super(ENIGMA_IDS.COLORS, "Scanner de Couleurs");
+        super(ENIGMA_IDS.COLORS, "Scanner de Couleurs", [], IRL_REWARDS.V_AFTER_COLORS);
 
         this.maze = new Maze(MAZE_LAYOUT);
 
