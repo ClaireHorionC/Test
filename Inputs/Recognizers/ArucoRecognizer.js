@@ -44,8 +44,6 @@ export class ArucoRecognizer {
         return true;
     }
 
-    // Dans ArucoRecognizer.js
-
     updateAruco(visionState, webcamRunning) {
         // 1. Sécurité : On ne fait rien si la webcam n'est pas prête
         if (!webcamRunning || !this.video || this.video.videoWidth === 0) return;
@@ -137,7 +135,6 @@ export class ArucoRecognizer {
 
             pPixel.delete();
             pReal.delete();
-
             cv.imshow(this.canvas, this.srcMat);
 
         } catch (err) {
