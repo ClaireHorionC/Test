@@ -98,7 +98,7 @@ class GameEngine {
         console.log("🎮 GameEngine: Démarrage de la boucle principale.");
 
         this.putEnigmaIntoTheActivePool(ENIGMA_IDS.COLORS); //we let the logic of the UI, (so that the buttons of the tabs does not show in the animation)
-        this.putEnigmaIntoTheActivePool(ENIGMA_IDS.LSF);    //so we activate the buttons in transitionToBeginningTab()
+        this.putEnigmaIntoTheActivePool(ENIGMA_IDS.ARUCO); //we let the logic of the UI, (so that the buttons of the tabs does not show in the animation)
 
 
         requestAnimationFrame(() => this.loop());
@@ -146,7 +146,6 @@ class GameEngine {
 
                 if (tab && tab.activeOrNot === true) { // we update only if the tab is active (id est open)
                     if (!currentEnigma.isResolved) {
-
                         currentEnigma.update();
 
                     } else if (currentEnigma.isResolved) { // else if for security you never know in javascript
