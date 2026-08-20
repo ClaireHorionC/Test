@@ -2,6 +2,7 @@ import uiManagerInstance from '../UIManager.js';
 
 import { WebcamButton } from '../WebcamButton.js'; //we import the entire class but we only use initWebcamButtonEvent 
 import { Tab } from './Tab.js';
+import { showTimer } from '../TimerUI.js';
 
 
 import { ENIGMA_STATUS } from '../../Utils/Constant.js';
@@ -77,6 +78,7 @@ export class TabManager {
 
         this.displayOrNotWebcam(tabId);
         this.displayOrNotNavigationBar(tabId); //we don't display the naviguation bar only on the welcome page for the moment
+        showTimer(tabId !== 'welcome'); //le compte à rebours suit le joueur sur tous les onglets sauf l'accueil
     }
 
     displayOrNotWebcam(tabId) {

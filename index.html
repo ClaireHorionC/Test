@@ -16,6 +16,7 @@
     <!-- Blocs réutilisables -->
     <link rel="stylesheet" href="styles/components/webcam.css">
     <link rel="stylesheet" href="styles/components/terminal.css">
+    <link rel="stylesheet" href="styles/components/timer.css">
     <link rel="stylesheet" href="styles/components/errorWindow.css">
     <link rel="stylesheet" href="styles/components/confirmModal.css">
     <link rel="stylesheet" href="styles/components/cinematics.css">
@@ -57,6 +58,9 @@
 
         <!-- l'écran de victoire s'ouvre par le code, jamais par un clic : le bouton reste caché (pas de classe available) -->
         <button class="tab-button" data-target="victoire">Should not be displayed - victory</button>
+
+        <!-- caché sur l'accueil, affiché partout ailleurs une fois la mission lancée -->
+        <div id="mission-timer" class="mission-timer"></div>
 
         <button id="btn-open-terminal" class="fixed-terminal-btn">
             💻 Terminal

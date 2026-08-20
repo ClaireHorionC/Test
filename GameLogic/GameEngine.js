@@ -9,6 +9,7 @@ import { FinalEnigma } from './Enigmas/FinalEnigma.js';
 import { ENIGMA_STATUS } from '../Utils/Constant.js';
 import { ENIGMA_IDS } from '../Utils/Constant.js';
 import { HELP_IDS } from '../Utils/Constant.js';
+import { Timer } from './Timer.js';
 
 
 import { showError } from '../UI/AlertManager.js';
@@ -33,6 +34,8 @@ class GameEngine {
 
         //first of the two conditions unlocking the guilty enigma, the second one being the LSF enigma resolved
         this.chatbotHasFoundCulprit = false;
+
+        this.timer = new Timer();
 
         //to lower the fps rendering (not used because it works well for now without it)
         // this.fpsTarget = 10;
@@ -96,6 +99,8 @@ class GameEngine {
         if (this.isRunning) return;
         this.isRunning = true;
         console.log("🎮 GameEngine: Démarrage de la boucle principale.");
+
+        this.timer.start();
 
         this.putEnigmaIntoTheActivePool(ENIGMA_IDS.COLORS); //we let the logic of the UI, (so that the buttons of the tabs does not show in the animation)
         this.putEnigmaIntoTheActivePool(ENIGMA_IDS.ARUCO); //we let the logic of the UI, (so that the buttons of the tabs does not show in the animation)
