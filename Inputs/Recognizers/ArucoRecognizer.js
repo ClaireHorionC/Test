@@ -127,8 +127,8 @@ export class ArucoRecognizer {
                                 y: pReal.data32F[1]
                             });
                         }
-                        H.delete();
                     }
+                    H.delete();
                     pointsPixels.delete();
                 }
             }
