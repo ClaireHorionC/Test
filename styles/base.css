@@ -4,8 +4,26 @@
    tout ce qui est un bloc réutilisable vit dans components/.
    =================================================== */
 
+/* We use the same font everywhere that I puted in Utils/Fonts
+*/
+@font-face {
+    font-family: 'JepeiaSans';
+    src: url('../Utils/Fonts/dejavu-sans.bold.ttf') format('truetype');
+
+    font-weight: 700;
+    font-style: normal;
+    font-display: swap;
+}
+
+:root {
+    /* Les polices emoji du système sont ajoutées en fin de pile : une police de texte peut contenir
+       des variantes monochromes de certains signes et les afficher à la place des vrais emojis. */
+    --font-main: 'JepeiaSans', 'Segoe UI Emoji', 'Apple Color Emoji', 'Noto Color Emoji', sans-serif;
+    --font-mono: 'Courier New', Courier, monospace;
+}
+
 body {
-    font-family: Roboto, sans-serif;
+    font-family: var(--font-main);
     margin: 2em;
     color: #3d3d3d;
     background-color: #f4f6f8;
@@ -37,7 +55,12 @@ p {
 }
 
 
-/* --- Boutons par défaut (les boutons spécialisés surchargent ces règles) --- */
+input,
+button,
+textarea,
+select {
+    font-family: inherit;
+}
 
 button {
     cursor: pointer;

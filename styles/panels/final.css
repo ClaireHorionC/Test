@@ -3,7 +3,6 @@
 #panel-final {
     padding: 20px;
     box-sizing: border-box;
-    font-family: 'Inter', 'Segoe UI', Arial, sans-serif;
 }
 
 .final-instruction {
@@ -32,7 +31,7 @@
 .zone-code-final input {
     flex: 1;
     padding: 12px 18px;
-    font-family: 'Courier New', Courier, monospace;
+    font-family: var(--font-mono);
     font-size: 1.3rem;
     letter-spacing: 3px;
     text-align: center;

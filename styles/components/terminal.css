@@ -30,7 +30,7 @@
     color: #0f0;
     border: 1px solid #0f0;
     padding: 20px;
-    font-family: 'Courier New', Courier, monospace;
+    font-family: var(--font-mono);
 }
 
 
