@@ -62,11 +62,8 @@ export class ArucoEnigma extends Enigma {
         if (this.isResolved) return;
 
         inputManagerInstance.update(this.id);
-
         // playerState contient désormais { markers: [...], sheetsVisible: [...] } fourni par le Recognizer
         const playerState = inputManagerInstance.getState();
-
-        console.log(playerState);
 
         this.checkCondition(playerState);
     }
