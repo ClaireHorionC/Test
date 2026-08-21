@@ -31,7 +31,7 @@ class AudioManager {
         const unlock = () => {
             this.getContext();
 
-            if (!ctx || ctx.state !== 'running') return;
+            if (!this.ctx || this.ctx.state !== 'running') return;
 
             document.removeEventListener('click', unlock);
             document.removeEventListener('keydown', unlock);
