@@ -35,8 +35,19 @@ export class ArucoRecognizer {
     }
 
     initState() {
-
         this.lastAnalysedPicture = null;
+
+        this.sheetHomographies = {
+            1: null, 
+            2: null
+        };
+        
+        this.sheetHomographyAge = {
+            1: 999,
+            2: 999
+        };
+
+        this.maxHomographyAge = 10;
     }
 
     initAruco() {
