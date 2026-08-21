@@ -1,10 +1,10 @@
 import {
-    GestureRecognizer,
+    HandLandmarker,
     FilesetResolver,
     DrawingUtils
 } from "https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.12/vision_bundle.mjs";
 
-export { DrawingUtils, GestureRecognizer };
+export { DrawingUtils, HandLandmarker };
 
 export async function initMediapipe() {
     try {
@@ -12,18 +12,18 @@ export async function initMediapipe() {
             "https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.12/wasm"
         );
 
-        const gestureRecognizer = await GestureRecognizer.createFromOptions(vision, {
+        const handLandmarker = await HandLandmarker.createFromOptions(vision, {
             baseOptions: {
-                modelAssetPath: "https://storage.googleapis.com/mediapipe-models/gesture_recognizer/gesture_recognizer/float16/1/gesture_recognizer.task",
+                modelAssetPath: "https://storage.googleapis.com/mediapipe-models/hand_landmarker/hand_landmarker/float16/1/hand_landmarker.task",
                 delegate: "CPU"
             },
             runningMode: "VIDEO",
             numHands: 4
         });
         console.log("UpdateLsf : MediaPipe est prêt !");
-        return gestureRecognizer; // Indique que tout s'est bien passé
+        return handLandmarker; // Indique que tout s'est bien passé
     } catch (error) {
         console.error("Erreur d'initialisation MediaPipe :", error);
-        return false;
+        return null;
     }
 }

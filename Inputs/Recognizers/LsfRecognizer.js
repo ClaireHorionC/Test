@@ -1,5 +1,5 @@
 import { whichLetterIsDetected } from '../../Utils/LsfDictionary.js';
-import { initMediapipe, DrawingUtils, GestureRecognizer } from '../../Utils/LibraryLoading/LoadMediapipe.js';
+import { initMediapipe, DrawingUtils, HandLandmarker } from '../../Utils/LibraryLoading/LoadMediapipe.js';
 
 export class LsfRecognizer {
 
@@ -8,30 +8,30 @@ export class LsfRecognizer {
         this.canvas = canvasElement;
         this.ctx = this.canvas.getContext("2d");
 
-        this.gestureRecognizer = null;
+        this.handLandmarker = null;
         this.lastVideoTime = -1;
 
         //this.loadMediapipe = new LoadMediapipe();
     }
 
     async initLsf() {
-        this.gestureRecognizer = await initMediapipe();
+        this.handLandmarker = await initMediapipe();
 
-        return (this.gestureRecognizer !== null);
+        return Boolean(this.handLandmarker);
     }
 
     updateLsf(currentResults, webcamRunning) {
         // On vide la liste des gestes à chaque nouvelle image
         currentResults.gestures.length = 0;
 
-        if (webcamRunning && this.video.currentTime !== this.lastVideoTime && this.video.videoWidth > 0 && this.gestureRecognizer) {
+        if (webcamRunning && this.video.currentTime !== this.lastVideoTime && this.video.videoWidth > 0 && this.handLandmarker) {
             this.lastVideoTime = this.video.currentTime;
             let nowInMs = Math.round(this.video.currentTime * 1000);
 
             // Dessin de la vidéo en fond
             this.ctx.drawImage(this.video, 0, 0, this.canvas.width, this.canvas.height);
 
-            const results = this.gestureRecognizer.recognizeForVideo(this.video, nowInMs);
+            const results = this.handLandmarker.detectForVideo(this.video, nowInMs);
             const drawingUtils = new DrawingUtils(this.ctx);
 
             this.drawMediapipeHandsOverlay(results, drawingUtils);
@@ -58,7 +58,7 @@ export class LsfRecognizer {
         if (results.landmarks) {
             // old code used to draw the ligne and points on hands detected by mediapipe
             for (const landmarks of results.landmarks) {
-                drawingUtils.drawConnectors(landmarks, GestureRecognizer.HAND_CONNECTIONS, { color: "#00FF00", lineWidth: 3 });
+                drawingUtils.drawConnectors(landmarks, HandLandmarker.HAND_CONNECTIONS, { color: "#00FF00", lineWidth: 3 });
                 drawingUtils.drawLandmarks(landmarks, { color: "#FF0000", lineWidth: 1 });
             }
         }
