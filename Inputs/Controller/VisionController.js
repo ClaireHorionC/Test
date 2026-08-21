@@ -59,7 +59,7 @@ export class VisionController {
             this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
         } else {
             // Allumage avec gestion stricte des erreurs matérielles
-            navigator.mediaDevices.getUserMedia({video: {width: {ideal: 1280}, height: {ideal: 720}}, audio: false})
+            navigator.mediaDevices.getUserMedia({video: true})
                 .then((stream) => {
                     this.video.srcObject = stream;
 
@@ -72,21 +72,6 @@ export class VisionController {
                     };
 
                     this.video.addEventListener("loadeddata", () => {
-                        console.log(
-                            "VIDEO:",
-                            this.video.videoWidth,
-                            "x",
-                            this.video.videoHeight
-                        );
-                    
-                        const track = stream.getVideoTracks()[0];
-                    
-                        console.log(
-                            "TRACK:",
-                            track.getSettings().width,
-                            "x",
-                            track.getSettings().height
-                        );
                         // On sécurise aussi le play() qui peut être bloqué par le navigateur
                         this.video.play().catch(e => {
                             this.handleHardwareCrash("Le navigateur bloque la lecture vidéo.");
