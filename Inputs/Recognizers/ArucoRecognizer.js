@@ -155,13 +155,13 @@ export class ArucoRecognizer {
                     H.delete();
                     pointsPixels.delete();
                 } else if (
-                    this.sheetHomographies[sheetID] && 
-                    thos.sheetHomographyAge[sheetID] <= this.maxHomographyAge
+                    this.sheetHomographies[s.ID] && 
+                    thos.sheetHomographyAge[[s.ID] <= this.maxHomographyAge
                 ) {
 
-                    let H = this.sheetHomographies[sheetID];
+                    let H = this.sheetHomographies[[s.ID];
 
-                    visionState.sheetsVisible.push(sheetID);
+                    visionState.sheetsVisible.push([s.ID);
 
                     for (const markerID in cornersPixels) {
                         pPixel.data32F[0] = cornersPixels[markerID][0];
