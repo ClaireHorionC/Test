@@ -157,7 +157,7 @@ export class ArucoRecognizer {
                 } else if (
                     this.sheetHomographies[sheetID] && 
                     thos.sheetHomographyAge[sheetID] <= this.maxHomographyAge
-                    ) {
+                ) {
 
                     let H = this.sheetHomographies[sheetID];
 
