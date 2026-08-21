@@ -47,7 +47,7 @@ export class ArucoRecognizer {
             2: 999
         };
 
-        this.maxHomographyAge = 10;
+        this.maxHomographyAge = 100;
     }
 
     initAruco() {
