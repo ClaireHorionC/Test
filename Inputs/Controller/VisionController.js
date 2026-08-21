@@ -59,7 +59,7 @@ export class VisionController {
             this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
         } else {
             // Allumage avec gestion stricte des erreurs matérielles
-            navigator.mediaDevices.getUserMedia({ video: true })
+            navigator.mediaDevices.getUserMedia({video: {width: {ideal: 1280}, height: {ideal: 720}}, audio: false})
                 .then((stream) => {
                     this.video.srcObject = stream;
 
