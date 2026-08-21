@@ -28,6 +28,15 @@ export class ArucoEnigma extends Enigma {
         this.nbIterationsCheck = 0;
         this.dictID = {};
         this.sheetsInvisibleCounter = { 1: 0, 2: 0 };
+        this.sheetHomographies = {
+            1: null,
+            2: null
+        };
+        this.sheetHomographyAge = {
+            1: 999,
+            2: 999
+        };
+        this.maxHomographyAge = 10;
 
         this.bindUI();
     }
