@@ -1,5 +1,5 @@
 import { whichLetterIsDetected } from '../../Utils/LsfDictionary.js';
-import { initMediapipe, DrawingUtils, GestureRecognizer } from '../../Utils/Libraries/LoadMediapipe.js';
+import { initMediapipe, DrawingUtils, GestureRecognizer } from '../../Utils/LibraryLoading/LoadMediapipe.js';
 
 export class LsfRecognizer {
 

@@ -16,7 +16,7 @@ import { showError } from '../UI/AlertManager.js';
 import { showVictoryScreen } from '../UI/AlertManager.js';
 import { showRewardAlert } from '../UI/AlertManager.js';
 
-import { initOpenCV } from '../Utils/Libraries/LoadOpenCV.js';
+import { initOpenCV } from '../Utils/LibraryLoading/LoadOpenCV.js';
 
 
 class GameEngine {
