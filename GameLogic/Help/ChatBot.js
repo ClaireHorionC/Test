@@ -1,5 +1,4 @@
-import levenshtein from 'https://esm.sh/js-levenshtein';
-import { wait, normalizeText } from '../../Utils/UtilFunctions.js';
+import { wait, normalizeText, levenshtein } from '../../Utils/UtilFunctions.js';
 import { SUSPECTS_BY_TEAM, CURRENT_TEAM } from '../../Utils/Constant.js';
 
 import gameEngineInstance from '../GameEngine.js';
