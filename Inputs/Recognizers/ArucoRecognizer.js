@@ -85,6 +85,12 @@ export class ArucoRecognizer {
         visionState.markers = [];
         visionState.sheetsVisible = [];
 
+        for (const sheetID of [1, 2]) {
+            if (this.sheetHomographyAge[sheetID] < 999) {
+                this.sheetHomographyAge[sheetID]++;
+            }
+        }
+
         try {
             this.readFrame(this.srcMat);
             this.detector.detectMarkers(this.gray, corners, ids, rejected);
@@ -148,8 +154,29 @@ export class ArucoRecognizer {
 
                     H.delete();
                     pointsPixels.delete();
+                } else if (
+                    this.sheetHomographies[sheetID] && 
+                    thos.sheetHomographyAge[sheetID] <= this.maxHomographyAge
+                    ) {
+
+                    let H = this.sheetHomographies[sheetID];
+
+                    visionState.sheetsVisible.push(sheetID);
+
+                    for (const markerID in cornersPixels) {
+                        pPixel.data32F[0] = cornersPixels[markerID][0];
+                        pPixel.data32F[1] = cornersPixels[markerID][1];
+                        cv.perspectiveTransform(pPixel, pReal, H);
+                        
+                        visionState.markers.push({
+                                id: parseInt(markerID),
+                                sheetID: s.ID,
+                                x: pReal.data32F[0],
+                                y: pReal.data32F[1]
+                        });
+                    }
                 }
-            }
+                
 
             pPixel.delete();
             pReal.delete();
@@ -181,10 +208,6 @@ export class ArucoRecognizer {
             this.lastAnalysedPicture.delete();
         }
         this.lastAnalysedPicture = this.gray.clone();
-
-        for (const sheetID of [1, 2]) {
-            this.sheetHomographyAge[sheetID]++;
-        }
     }
 
 }
