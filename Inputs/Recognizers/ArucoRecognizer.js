@@ -114,6 +114,12 @@ export class ArucoRecognizer {
                     let H = cv.findHomography(pointsPixels, this.realPoints);
 
                     if (!H.empty()) {
+                        if (this.sheetHomographies[s.ID]) {
+                            this.sheetHomographies[s.ID].delete();
+                        }
+                        this.sheetHomographies[s.ID] = H.clone();
+                        this.sheetHomographyAge[s.ID] = 0;
+
                         for (let markerID in cornersPixels) {
                             pPixel.data32F[0] = cornersPixels[markerID][0];
                             pPixel.data32F[1] = cornersPixels[markerID][1];
@@ -128,6 +134,7 @@ export class ArucoRecognizer {
                             });
                         }
                     }
+
                     H.delete();
                     pointsPixels.delete();
                 }
@@ -163,6 +170,10 @@ export class ArucoRecognizer {
             this.lastAnalysedPicture.delete();
         }
         this.lastAnalysedPicture = this.gray.clone();
+
+        for (const sheetID of [1, 2]) {
+            this.sheetHomographyAge[sheetID]++;
+        }
     }
 
 }
