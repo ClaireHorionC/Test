@@ -241,18 +241,6 @@ export class ArucoRecognizer {
             ids.delete();
             rejected.delete();
         }
-
-// message affichage pour débugger
-        console.log("---------");
-        console.log("this.sheetHomographies[1]", this.sheetHomographies[1],
-                   "this.sheetHomographyAge[1]", this.sheetHomographyAge[1]);
-        console.log("this.sheetHomographies[2]", this.sheetHomographies[2],
-                   "this.sheetHomographyAge[2]", this.sheetHomographyAge[2]);
-        console.log("this.savedSheetCorners[1]", this.savedSheetCorners[1],
-                    "this.sheetCornerAge[1]", this.sheetCornerAge[1]);
-        console.log("this.savedSheetCorners[2]", this.savedSheetCorners[2],
-                    "this.sheetCornerAge[2]", this.sheetCornerAge[2]);
-
         
     }
 
