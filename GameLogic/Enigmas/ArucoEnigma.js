@@ -90,6 +90,10 @@ export class ArucoEnigma extends Enigma {
                     Math.abs(marker.y - card.pos[1]) <= this.positionTolerance) {
 
                     this.dictID[marker.id]++;
+
+                    // affichage
+                    console.log(marker.x, card.pos[0]);
+                    console.log(marker.y, card.pos[1]);
                 }
             }
         });
