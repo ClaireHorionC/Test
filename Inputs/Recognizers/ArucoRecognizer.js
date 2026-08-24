@@ -156,7 +156,7 @@ export class ArucoRecognizer {
                     pointsPixels.delete();
                 } else if (
                     this.sheetHomographies[s.ID] && 
-                    thos.sheetHomographyAge[[s.ID] <= this.maxHomographyAge
+                    this.sheetHomographyAge[s.ID] <= this.maxHomographyAge
                 ) {
 
                     let H = this.sheetHomographies[[s.ID];
