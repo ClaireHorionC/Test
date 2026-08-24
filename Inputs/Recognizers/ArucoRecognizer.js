@@ -161,7 +161,7 @@ export class ArucoRecognizer {
                     const age = this.sheetCornerAge[sheet.ID][IDDetected];
 
                     if (saved && age!== undefined && age <= this.maxCornerAge) {
-                        cornersPixels[IDDetected] = [saved.x, saved.y];
+                        sheetCornersPixels[IDDetected] = [saved.x, saved.y];
                     }
              
                 }
