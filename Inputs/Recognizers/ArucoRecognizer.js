@@ -259,25 +259,4 @@ export class ArucoRecognizer {
     }
 }
     
-    /*
-    readFrame(src) {
-        const cv = window.cv;
-        this.cap.read(src);
-
-        let rgbaPlanes = new cv.MatVector();
-        cv.split(src, rgbaPlanes);
-        let firstPlane = rgbaPlanes.get(0);
-        firstPlane.copyTo(this.gray);
-        firstPlane.delete();
-        rgbaPlanes.delete();
-
-        this.clahe.apply(this.gray, this.gray);
-
-        if (this.lastAnalysedPicture) {
-            this.lastAnalysedPicture.delete();
-        }
-        this.lastAnalysedPicture = this.gray.clone();
-}
-
-}
-*/
+  
