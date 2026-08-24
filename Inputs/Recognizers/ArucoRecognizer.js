@@ -257,6 +257,7 @@ export class ArucoRecognizer {
         }
         this.lastAnalysedPicture = this.gray.clone();
     }
+}
     
     /*
     readFrame(src) {
