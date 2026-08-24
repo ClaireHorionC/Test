@@ -47,7 +47,7 @@ export class ArucoRecognizer {
             2: 999
         };
 
-        this.maxHomographyAge = 50;
+        this.maxHomographyAge = 200;
 
         this.savedSheetCorners = {
             1: {},
@@ -59,7 +59,7 @@ export class ArucoRecognizer {
             2: {}
         };
 
-        this.maxCornerAge = 50;
+        this.maxCornerAge = 200;
     }
 
     initAruco() {
