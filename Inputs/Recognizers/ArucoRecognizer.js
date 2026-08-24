@@ -156,10 +156,10 @@ export class ArucoRecognizer {
                     pointsPixels.delete();
                 } else if (
                     this.sheetHomographies[s.ID] && 
-                    this.sheetHomographyAge[s.ID] <= this.maxHomographyAge
+                    (this.sheetHomographyAge[s.ID] <= this.maxHomographyAge)
                 ) {
 
-                    let H = this.sheetHomographies[[s.ID];
+                    let H = this.sheetHomographies[s.ID];
 
                     visionState.sheetsVisible.push([s.ID);
 
