@@ -115,7 +115,7 @@ export class ArucoRecognizer {
             this.readFrame(this.srcMat);
             this.detector.detectMarkers(this.gray, corners, ids, rejected);
 
-            //let cornersPixels = {};   à enlever ?
+            let cornersPixels = {};   
 
             if (ids.rows > 0) {
                 
@@ -151,7 +151,7 @@ export class ArucoRecognizer {
                 }
             }
 
-            cornersPixels = {};
+            let sheetCornersPixels = {};
             
             for (const sheet of this.sheets) {
 
@@ -174,11 +174,11 @@ export class ArucoRecognizer {
             for (let s of this.sheets) {
                 let [ul, ur, dr, dl] = s.corners;
 
-                if (ul in cornersPixels && ur in cornersPixels && dr in cornersPixels && dl in cornersPixels) {
+                if (ul in sheetCornersPixels && ur in sheetCornersPixels && dr in sheetCornersPixels && dl in sheetCornersPixels) {
                     // On enregistre que cette feuille est bien visible
                     visionState.sheetsVisible.push(s.ID);
 
-                    let pointsPixels = cv.matFromArray(4, 1, cv.CV_32FC2, [...cornersPixels[ul], ...cornersPixels[ur], ...cornersPixels[dr], ...cornersPixels[dl]]);
+                    let pointsPixels = cv.matFromArray(4, 1, cv.CV_32FC2, [...sheetCornersPixels[ul], ...sheetCornersPixels[ur], ...sheetCornersPixels[dr], ...sheetCornersPixels[dl]]);
                     let H = cv.findHomography(pointsPixels, this.realPoints);
 
                     if (!H.empty()) {
