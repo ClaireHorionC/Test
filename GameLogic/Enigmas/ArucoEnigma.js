@@ -143,7 +143,7 @@ export class ArucoEnigma extends Enigma {
                 text = `Nombre de cartes correctes et bien placées: ${nbCardsOK} sur ${nbCardsToPlace} cartes`;
             }
         } else {
-            text = "Tous les coins des feuilles ne sont pas visibles !";
+            text = "Tous les coins du plateau de jeu ne sont pas visibles !";
             mess = "";
         }
 
