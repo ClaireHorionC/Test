@@ -244,6 +244,21 @@ export class ArucoRecognizer {
         
     }
 
+
+    readFrame(src) {
+        const cv = window.cv;
+        this.cap.read(src);
+
+        cv.cvtColor(src, this.gray, cv.COLOR_RGBA2GRAY);
+        this.clahe.apply(this.gray, this.gray);
+
+        if (this.lastAnalysedPicture) {
+            this.lastAnalysedPicture.delete();
+        }
+        this.lastAnalysedPicture = this.gray.clone();
+    }
+    
+    /*
     readFrame(src) {
         const cv = window.cv;
         this.cap.read(src);
@@ -261,6 +276,7 @@ export class ArucoRecognizer {
             this.lastAnalysedPicture.delete();
         }
         this.lastAnalysedPicture = this.gray.clone();
-    }
+}
 
 }
+*/
