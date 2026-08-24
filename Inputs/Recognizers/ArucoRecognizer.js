@@ -47,7 +47,19 @@ export class ArucoRecognizer {
             2: 999
         };
 
-        this.maxHomographyAge = 100;
+        this.maxHomographyAge = 50;
+
+        this.savedSheetCorners = {
+            1: {},
+            2: {}
+        };
+
+        this.sheetCornerAge = {
+            1: {},
+            2: {}
+        };
+
+        this.maxCornerAge = 50;
     }
 
     initAruco() {
@@ -91,13 +103,22 @@ export class ArucoRecognizer {
             }
         }
 
+        for (const sheet of this.sheets) {
+            for (const IDDetected of sheet.corners) {
+                if (this.sheetCornerAge[sheet.ID][IDDetected] !== undefined) {
+                    this.sheetCornerAge[sheet.ID][IDDetected]++;
+                }
+            }
+        }
+        
         try {
             this.readFrame(this.srcMat);
             this.detector.detectMarkers(this.gray, corners, ids, rejected);
 
-            let cornersPixels = {};
+            //let cornersPixels = {};   à enlever ?
 
             if (ids.rows > 0) {
+                
                 cv.drawDetectedMarkers(this.gray, corners, ids);
 
                 for (let i = 0; i < ids.rows; ++i) {
@@ -112,11 +133,41 @@ export class ArucoRecognizer {
 
                     cornersPixels[IDDetected] = [cx, cy];
 
+                    for (const sheet of this.sheets) {
+
+                        if (sheet.corners.includes(IDDetected)) {
+
+                            this.savedSheetCorners[sheet.ID][IDDetected] = {
+                                x: cx,
+                                y: cy
+                            };
+
+                            this.sheetCornerAge[sheet.ID][IDDetected] = 0;
+                        }
+                    }
+
                     // Suppression indispensable de la matrice temporaire
                     markerMat.delete();
                 }
             }
 
+            cornersPixels = {};
+            
+            for (const sheet of this.sheets) {
+
+                for (const IDDetected of sheet.corners) {
+
+                    const saved = this.savedSheetCorners[sheet.ID][IDDetected];
+                    const age = this.sheetCornerAge[sheet.ID][IDDetected];
+
+                    if (saved && age!== undefined && age <= this.maxCornerAge) {
+                        cornersPixels[IDDetected] = [saved.x, saved.y];
+                    }
+             
+                }
+            
+            }
+            
             let pPixel = new cv.Mat(1, 1, cv.CV_32FC2);
             let pReal = new cv.Mat();
 
