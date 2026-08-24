@@ -161,7 +161,7 @@ export class ArucoRecognizer {
 
                     let H = this.sheetHomographies[s.ID];
 
-                    visionState.sheetsVisible.push([s.ID);
+                    visionState.sheetsVisible.push(s.ID);
 
                     for (const markerID in cornersPixels) {
                         pPixel.data32F[0] = cornersPixels[markerID][0];
