@@ -24,8 +24,8 @@ export class ArucoRecognizer {
         const UpLeft1 = 90, UpRight1 = 91, DownRight1 = 93, DownLeft1 = 92;
         const UpLeft2 = 94, UpRight2 = 95, DownRight2 = 97, DownLeft2 = 96;
 
-        this.realWidth = 262;
-        this.realHeight = 175;
+        this.realWidth = 370;  // 262
+        this.realHeight = 244;  // 175
 
         // On ne garde que les données physiques
         this.sheets = [
