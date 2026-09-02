@@ -13,14 +13,14 @@ export class ArucoEnigma extends Enigma {
         this.maxID = 100;
 
         this.dictCards = {
-            1: { "ID": 0, "falseID": 11, "pos": [7, 124], "sheet": 1, "name": "Deux IA peuvent créer leur propre langage." },
-            2: { "ID": 1, "falseID": 10, "pos": [77, 124], "sheet": 1, "name": "L'IA peut améliorer le diagnostic de certaines maladies, en soutien au médecin." },
-            3: { "ID": 2, "falseID": 9, "pos": [147, 124], "sheet": 1, "name": "Une IA a une meilleure puissance de calcul qu'un humain." },
-            4: { "ID": 3, "falseID": 8, "pos": [217, 124], "sheet": 1, "name": "Les IA génératives sont très mauvaises en mathématiques." },
-            5: { "ID": 4, "falseID": 15, "pos": [7, 124], "sheet": 2, "name": "Les IA peuvent mentir." },
-            6: { "ID": 5, "falseID": 14, "pos": [77, 124], "sheet": 2, "name": "L'IA peut apprendre de façon autonome." },
-            7: { "ID": 6, "falseID": 13, "pos": [147, 124], "sheet": 2, "name": "Les IA récentes consomment moins d'énergie qu'une recherche Internet classique." },
-            8: { "ID": 7, "falseID": 12, "pos": [217, 124], "sheet": 2, "name": "L'IA générative peut créer du contenu original." }
+            1: { "ID": 0, "falseID": 11, "pos": [11, 124], "sheet": 1, "name": "Deux IA peuvent créer leur propre langage." },  // 7, 124
+            2: { "ID": 1, "falseID": 10, "pos": [109, 124], "sheet": 1, "name": "L'IA peut améliorer le diagnostic de certaines maladies, en soutien au médecin." },  // 77, 124
+            3: { "ID": 2, "falseID": 9, "pos": [207, 124], "sheet": 1, "name": "Une IA a une meilleure puissance de calcul qu'un humain." },  // 147, 124
+            4: { "ID": 3, "falseID": 8, "pos": [305, 124], "sheet": 1, "name": "Les IA génératives sont très mauvaises en mathématiques." },  // 217, 124
+            5: { "ID": 4, "falseID": 15, "pos": [11, 124], "sheet": 2, "name": "Les IA peuvent mentir." },  // 7, 124
+            6: { "ID": 5, "falseID": 14, "pos": [109, 124], "sheet": 2, "name": "L'IA peut apprendre de façon autonome." },  // 77, 124
+            7: { "ID": 6, "falseID": 13, "pos": [207, 124], "sheet": 2, "name": "Les IA récentes consomment moins d'énergie qu'une recherche Internet classique." },  // 147, 124
+            8: { "ID": 7, "falseID": 12, "pos": [305, 124], "sheet": 2, "name": "L'IA générative peut créer du contenu original." }  // 217, 124
         };
 
         // État de l'énigme
